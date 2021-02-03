@@ -1,6 +1,6 @@
 {
     "name": "find-your-change-api",
-    "version": "1.0",
+    "version": "1.0.0",
     "private": true,
     "description": "API do sistema FindYourChange",
     "main": "index.js",

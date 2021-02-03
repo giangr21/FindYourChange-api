@@ -1,5 +1,3 @@
-import { logger } from '@util/log.util';
-
 class AppError {
     public readonly message: string;
 
@@ -8,8 +6,6 @@ class AppError {
     constructor(message: string, statusCode = 400) {
         this.message = message;
         this.statusCode = statusCode;
-
-        logger.error(message);
     }
 }
 

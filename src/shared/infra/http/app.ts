@@ -6,7 +6,7 @@ import express, { NextFunction, Request, Response } from 'express';
 import 'express-async-errors';
 import 'reflect-metadata';
 import fileUpload from 'express-fileupload';
-import { createServer, Server } from 'http';
+import { Server } from 'http';
 import routes from './routes';
 
 class App {
@@ -39,11 +39,7 @@ class App {
                 message: 'Internal server error',
             });
         });
-
-
     }
-
 }
-
 
 export default new App();

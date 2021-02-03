@@ -1,10 +1,11 @@
 import { Router } from 'express';
 
-// import geolocationRouter from '../../../../modules/Geolocation/routes/geolocation.routes';
+import providerRouter from '../../../../modules/Provider/routes/provider.routes';
+import userRouter from '../../../../modules/User/routes/user.routes';
 
 const routes = Router();
 
-// routes.use('/geolocation', geolocationRouter);
-
+routes.use('/provider', providerRouter);
+routes.use('/user', userRouter);
 
 export default routes;
