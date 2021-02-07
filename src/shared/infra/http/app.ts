@@ -6,7 +6,7 @@ import express, { NextFunction, Request, Response } from 'express';
 import 'express-async-errors';
 import 'reflect-metadata';
 import fileUpload from 'express-fileupload';
-import { Server } from 'http';
+import { Server, createServer } from 'http';
 import routes from './routes';
 
 class App {
@@ -39,6 +39,8 @@ class App {
                 message: 'Internal server error',
             });
         });
+
+        this.server = createServer(this.app);
     }
 }
 

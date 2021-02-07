@@ -47,6 +47,7 @@ class UserService {
         }
 
         const hashedPassword = await hash(userData.password.toLowerCase(), 8);
+        console.log(hashedPassword);
         userData.password = hashedPassword;
 
         const user = userRepository.create(userData);

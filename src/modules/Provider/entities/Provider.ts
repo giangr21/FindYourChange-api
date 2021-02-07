@@ -20,7 +20,7 @@ export default class Provider {
     @Column({ type: 'varchar', length: 60 })
     email: string;
 
-    @Column({ type: 'varchar', length: 40 })
+    @Column({ type: 'varchar', length: 80 })
     password: string;
 
     @Column({ type: 'varchar', length: 120, nullable: true })
