@@ -15,6 +15,12 @@ export default class Schedule {
     @Column({ type: 'varchar', length: 10, name: 'hour_end' })
     hourEnd: string;
 
+    @Column({ type: 'varchar', length: 10, name: 'hour_lunch_start' })
+    hourLunchStart: string;
+
+    @Column({ type: 'varchar', length: 10, name: 'hour_lunch_end' })
+    hourLunchEnd: string;
+
     @Column({ type: 'bool', default: false })
     active: boolean;
 

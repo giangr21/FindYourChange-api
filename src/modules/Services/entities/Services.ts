@@ -15,6 +15,18 @@ export default class Services {
     @Column({ type: 'numeric', name: 'value', default: 0 })
     value: number;
 
+    @Column({ type: 'numeric', name: 'disccount', nullable: true })
+    disccount: number;
+
+    @Column({ type: 'numeric', length: 10, name: 'category' })
+    category: string;
+
+    @Column({ type: 'varchar', length: 20 })
+    time: string;
+
+    @Column({ type: 'varchar', length: 120, nullable: true })
+    image: string;
+
     @ManyToOne(() => Provider, provider => provider.schedules)
     @JoinColumn({ name: 'provider_id' })
     provider: Provider;

@@ -27,6 +27,9 @@ export default class Appointment {
     @Column({ type: 'numeric', default: 0 })
     rate: number;
 
+    @Column({ type: 'varchar', length: 240, name: 'notes', nullable: true })
+    notes: string;
+
     @CreateDateColumn({
         name: 'created_at',
         type: 'timestamptz',
