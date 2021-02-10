@@ -1,4 +1,5 @@
 import Appointment from '@modules/Appointment/entities/Appointment';
+import Clerk from '@modules/Clerk/entities/Clerk';
 import Product from '@modules/Product/entities/Product';
 import Schedule from '@modules/Schedule/entities/Schedule';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
@@ -83,4 +84,7 @@ export default class Provider {
 
     @OneToMany(() => Schedule, schedule => schedule.provider)
     schedules: Schedule[];
+
+    @OneToMany(() => Clerk, clerk => clerk.provider, { eager: true })
+    clerks: Clerk[];
 }
