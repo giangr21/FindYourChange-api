@@ -12,13 +12,13 @@ export default class Services {
     @Column({ type: 'varchar', length: 240 })
     description: string;
 
-    @Column({ type: 'numeric', name: 'value', default: 0 })
+    @Column({ type: 'numeric', default: 0 })
     value: number;
 
-    @Column({ type: 'numeric', name: 'disccount', nullable: true })
+    @Column({ type: 'numeric', nullable: true })
     disccount: number;
 
-    @Column({ type: 'numeric', length: 10, name: 'category' })
+    @Column({ type: 'varchar', length: 10 })
     category: string;
 
     @Column({ type: 'varchar', length: 20 })
