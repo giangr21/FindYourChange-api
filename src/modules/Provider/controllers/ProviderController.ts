@@ -1,5 +1,6 @@
 import AppError from '@shared/errors/AppError';
 import { Request, Response } from 'express';
+import { classToClass } from 'class-transformer';
 import ProviderService from '../services/ProviderService';
 
 export default class ProviderController {
@@ -19,7 +20,7 @@ export default class ProviderController {
             const providerService = new ProviderService();
             const { id } = request.params;
             const provider = await providerService.findById(id);
-            return response.json(provider);
+            return response.json(classToClass(provider));
         } catch (e) {
             console.log(e);
             throw new AppError(e);

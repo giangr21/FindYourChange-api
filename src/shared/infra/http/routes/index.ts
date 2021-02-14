@@ -5,6 +5,7 @@ import userRouter from '../../../../modules/User/routes/user.routes';
 import sessionRouter from '../../../../modules/Sessions/routes/sessions.routes';
 import clerkRouter from '../../../../modules/Clerk/routes/clerk.routes';
 import scheduleRouter from '../../../../modules/Schedule/routes/schedule.routes';
+import storageRouter from '../../../../modules/Storage/routes/storage.routes';
 
 const routes = Router();
 
@@ -13,5 +14,6 @@ routes.use('/user', userRouter);
 routes.use('/sessions', sessionRouter);
 routes.use('/clerk', clerkRouter);
 routes.use('/schedule', scheduleRouter);
+routes.use('/storage', storageRouter);
 
 export default routes;

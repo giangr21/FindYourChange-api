@@ -3,6 +3,7 @@ import Clerk from '@modules/Clerk/entities/Clerk';
 import Product from '@modules/Product/entities/Product';
 import Schedule from '@modules/Schedule/entities/Schedule';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Exclude } from 'class-transformer';
 
 @Entity('provider')
 export default class Provider {
@@ -21,6 +22,7 @@ export default class Provider {
     @Column({ type: 'varchar', length: 60 })
     email: string;
 
+    @Exclude()
     @Column({ type: 'varchar', length: 80 })
     password: string;
 
@@ -76,7 +78,7 @@ export default class Provider {
     })
     updatedAt: Date;
 
-    @OneToMany(() => Product, product => product.provider, { eager: true })
+    @OneToMany(() => Product, product => product.provider)
     products: Product[];
 
     @OneToMany(() => Appointment, appointment => appointment.provider)
@@ -85,6 +87,6 @@ export default class Provider {
     @OneToMany(() => Schedule, schedule => schedule.provider)
     schedules: Schedule[];
 
-    @OneToMany(() => Clerk, clerk => clerk.provider, { eager: true })
+    @OneToMany(() => Clerk, clerk => clerk.provider)
     clerks: Clerk[];
 }

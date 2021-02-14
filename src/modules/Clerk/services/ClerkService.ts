@@ -1,9 +1,11 @@
+import AppError from '@shared/errors/AppError';
+import StorageUtil from '@util/storage.util';
 import { getCustomRepository } from 'typeorm';
 import Clerk from '../entities/Clerk';
 import ClerkRepository from '../repositories/ClerkRepository';
 
 interface ClerkData {
-    id?: string;
+    id: string;
     name: string;
     image: string;
     phone: string;
@@ -25,29 +27,37 @@ export default class ClerkService {
 
     public async create(clerkData: ClerkData): Promise<string> {
         const clerkRepository = getCustomRepository(ClerkRepository);
+
         const alreadyExists = await clerkRepository.findByEmail(clerkData.email);
         if (alreadyExists) {
             throw new Error('Já existe um atendente com este email');
         }
+
         const clerk = await clerkRepository.save(clerkData);
         return clerk.id;
     }
 
     public async update(clerkData: ClerkData): Promise<string> {
         const clerkRepository = getCustomRepository(ClerkRepository);
-        if (!clerkData.id) {
-            throw new Error('Necessario informar id');
+        const storageUtil = new StorageUtil();
+
+        const clerk = await clerkRepository.findById(clerkData.id);
+
+        if (!clerk) {
+            throw new AppError('Atendente não encontrado.');
         }
-        const alreadyExists = await clerkRepository.findById(clerkData.id);
-        if (!alreadyExists) {
-            throw new Error('É Necessário informar um id válido!');
+
+        const email = await clerkRepository.findByEmail(clerk.email);
+        if (email && email.id !== clerk.id) {
+            throw new AppError('E-mail já está em uso.');
         }
-        const sameEmail = await clerkRepository.findByEmail(clerkData.email);
-        if (sameEmail && !(alreadyExists.id === sameEmail.id)) {
-            throw new Error('Ja existe um atendente com este email');
+
+        if (clerkData.image && clerkData.image !== clerk.image) {
+            await storageUtil.deleteFile(clerk.image);
         }
-        const clerk = await clerkRepository.save(clerkData);
-        return clerk.id;
+
+        const newClerk = await clerkRepository.save(clerkData);
+        return newClerk.id;
     }
 
     public async delete(id: string): Promise<boolean> {
