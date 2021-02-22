@@ -62,7 +62,7 @@ class UserService {
         const user = await userRepository.findById(userData.id);
 
         if (!user) {
-            throw new AppError('User not found.');
+            throw new AppError('Usuario nao encontrado.');
         }
 
         const newUser = await userRepository.save(userData);

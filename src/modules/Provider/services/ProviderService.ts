@@ -1,10 +1,12 @@
+import AppError from '@shared/errors/AppError';
+import StorageUtil from '@util/storage.util';
 import { hash } from 'bcryptjs';
 import { getCustomRepository } from 'typeorm';
 import Provider from '../entities/Provider';
 import ProviderRepository from '../repositories/ProviderRepository';
 
 interface ProviderData {
-    id?: string;
+    id: string;
     name: string;
     lastName: string;
     phone: string;
@@ -54,24 +56,25 @@ export default class ProviderService {
 
     public async update(providerData: ProviderData): Promise<string> {
         const providerRepository = getCustomRepository(ProviderRepository);
-        if (!providerData.id) {
-            throw new Error('Necessario informar id');
+        const storageUtil = new StorageUtil();
+
+        const provider = await providerRepository.findById(providerData.id);
+
+        if (!provider) {
+            throw new AppError('Prestador não encontrado.');
         }
 
-        const alreadyExists = await providerRepository.findById(providerData.id);
-
-        if (!alreadyExists) {
-            throw new Error('Necessario informar um id valido');
+        const email = await providerRepository.findByEmail(provider.email);
+        if (email && email.id !== provider.id) {
+            throw new AppError('E-mail já está em uso.');
         }
 
-        const sameEmail = await providerRepository.findByEmail(providerData.email);
-
-        if (sameEmail && !(alreadyExists.id === sameEmail.id)) {
-            throw new Error('Ja existe um provider com este email');
+        if (providerData.avatar && providerData.avatar !== provider.avatar) {
+            await storageUtil.deleteFile(provider.avatar);
         }
 
-        const provider = await providerRepository.save(providerData);
-        return provider.id;
+        const newProvider = await providerRepository.save(providerData);
+        return newProvider.id;
     }
 
     public async delete(id: string): Promise<boolean> {
