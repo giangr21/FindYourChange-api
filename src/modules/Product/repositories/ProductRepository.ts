@@ -8,9 +8,9 @@ class ProductRepository extends Repository<Product> {
         return product;
     }
 
-    public async findByEmail(email: string): Promise<Product | undefined> {
+    public async findByName(name: string): Promise<Product | undefined> {
         const product = await this.findOne({
-            where: { email },
+            where: { name },
         });
         return product;
     }

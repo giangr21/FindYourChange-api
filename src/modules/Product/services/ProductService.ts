@@ -23,30 +23,30 @@ export default class ProductService {
         return product;
     }
 
-    public async create(clerkData: ProductData): Promise<string> {
+    public async create(productData: ProductData): Promise<string> {
         const productRepository = getCustomRepository(ProductRepository);
-        const alreadyExists = await productRepository.findByEmail(clerkData.email);
+        const alreadyExists = await productRepository.findByName(productData.name);
         if (alreadyExists) {
-            throw new Error('Já existe um atendente com este email');
+            throw new Error('Já existe um produto com esse nome');
         }
-        const product = await productRepository.save(clerkData);
+        const product = await productRepository.save(productData);
         return product.id;
     }
 
-    public async update(clerkData: ProductData): Promise<string> {
+    public async update(productData: ProductData): Promise<string> {
         const productRepository = getCustomRepository(ProductRepository);
-        if (!clerkData.id) {
+        if (!productData.id) {
             throw new Error('Necessario informar id');
         }
-        const alreadyExists = await productRepository.findById(clerkData.id);
+        const alreadyExists = await productRepository.findById(productData.id);
         if (!alreadyExists) {
             throw new Error('É Necessário informar um id válido!');
         }
-        const sameEmail = await productRepository.findByEmail(clerkData.email);
-        if (sameEmail && !(alreadyExists.id === sameEmail.id)) {
-            throw new Error('Ja existe um atendente com este email');
-        }
-        const product = await productRepository.save(clerkData);
+        // const sameEmail = await productRepository.findByEmail(clerkData.email);
+        // if (sameEmail && !(alreadyExists.id === sameEmail.id)) {
+        //     throw new Error('Ja existe um atendente com este email');
+        // }
+        const product = await productRepository.save(productData);
         return product.id;
     }
 
