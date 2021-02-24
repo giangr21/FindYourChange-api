@@ -19,7 +19,7 @@ export default class Product {
     category: string;
 
     @Column({ type: 'varchar', name: 'product_img', length: 120, nullable: true })
-    productImg: string;
+    productImage: string;
 
     @Column({ type: 'varchar', length: 240, nullable: true })
     description: string;
