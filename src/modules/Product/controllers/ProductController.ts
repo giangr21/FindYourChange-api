@@ -26,6 +26,18 @@ export default class ProductController {
         }
     }
 
+    public async getByCategory(request: Request, response: Response): Promise<Response> {
+        try {
+            const productService = new ProductService();
+            const { category } = request.params;
+            const product = await productService.findByCategory(category);
+            return response.json(product);
+        } catch (e) {
+            console.log(e);
+            throw new AppError(e);
+        }
+    }
+
     public async create(request: Request, response: Response): Promise<Response> {
         try {
             const productService = new ProductService();

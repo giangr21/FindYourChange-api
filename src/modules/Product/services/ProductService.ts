@@ -23,6 +23,12 @@ export default class ProductService {
         return product;
     }
 
+    public async findByCategory(category: string): Promise<Product[] | undefined> {
+        const productRepository = getCustomRepository(ProductRepository);
+        const productsArr = await productRepository.findByCategory(category);
+        return productsArr;
+    }
+
     public async create(productData: ProductData): Promise<string> {
         const productRepository = getCustomRepository(ProductRepository);
         const alreadyExists = await productRepository.findByName(productData.name);

@@ -14,6 +14,13 @@ class ProductRepository extends Repository<Product> {
         });
         return product;
     }
+
+    public async findByCategory(category: string): Promise<Product[] | undefined> {
+        const products = await this.find({
+            where: { category },
+        });
+        return products;
+    }
 }
 
 export default ProductRepository;
