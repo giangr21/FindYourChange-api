@@ -14,6 +14,31 @@ class ProductRepository extends Repository<Product> {
         });
         return product;
     }
+
+    public async getByFilter(filter: any): Promise<Product[]> {
+        const findMerchant = await this.createQueryBuilder('product')
+            .select(['product'])
+            .orderBy('product.createdAt')
+            .where('product.provider = :providerId', {
+                providerId: filter.providerId,
+            });
+
+        if (filter.value && filter.value.trim() !== '') {
+            findMerchant.andWhere('product.value = :value', {
+                value: filter.value,
+            });
+        }
+
+        if (filter.name && filter.name.trim() !== '') {
+            findMerchant.andWhere('product.name ilike :name', {
+                name: `%${filter.name}%`,
+            });
+        }
+
+        const merchant = await findMerchant.getMany();
+
+        return merchant;
+    }
 }
 
 export default ProductRepository;

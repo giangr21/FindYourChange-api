@@ -14,6 +14,18 @@ export default class ProductController {
         }
     }
 
+    public async getProductsByProviderIdAndFilter(request: Request, response: Response): Promise<Response> {
+        try {
+            const productService = new ProductService();
+            const filter = request.body;
+            const listProduct = await productService.getProductsByProviderIdAndFilter(filter);
+            return response.json(listProduct);
+        } catch (e) {
+            console.log(e);
+            throw new AppError(e);
+        }
+    }
+
     public async getById(request: Request, response: Response): Promise<Response> {
         try {
             const productService = new ProductService();

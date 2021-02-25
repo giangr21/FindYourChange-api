@@ -23,6 +23,15 @@ export default class ProductService {
         return product;
     }
 
+    public async getProductsByProviderIdAndFilter(filter: any): Promise<Product[]> {
+        const productRepository = getCustomRepository(ProductRepository);
+        if (!filter.providerId) {
+            throw new Error('Necessario informar provider Id');
+        }
+        const product = await productRepository.getByFilter(filter);
+        return product;
+    }
+
     public async create(productData: ProductData): Promise<string> {
         const productRepository = getCustomRepository(ProductRepository);
         const alreadyExists = await productRepository.findByName(productData.name);
