@@ -26,6 +26,30 @@ export default class ScheduleController {
         }
     }
 
+    public async getByProviderId(request: Request, response: Response): Promise<Response> {
+        try {
+            const scheduleService = new ScheduleService();
+            const { id } = request.params;
+            const schedule = await scheduleService.getByProviderId(id);
+            return response.json(schedule);
+        } catch (e) {
+            console.log(e);
+            throw new AppError(e);
+        }
+    }
+
+    public async isDayOfWeekAvailable(request: Request, response: Response): Promise<Response> {
+        try {
+            const scheduleService = new ScheduleService();
+            const { providerId, dayOfWeek } = request.body;
+            const isAvailable = await scheduleService.isDayOfWeekAvailable(dayOfWeek, providerId);
+            return response.json(isAvailable);
+        } catch (e) {
+            console.log(e);
+            throw new AppError(e);
+        }
+    }
+
     public async create(request: Request, response: Response): Promise<Response> {
         try {
             const scheduleService = new ScheduleService();

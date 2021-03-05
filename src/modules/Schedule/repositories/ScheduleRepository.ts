@@ -7,13 +7,6 @@ class ScheduleRepository extends Repository<Schedule> {
         const schedule = await this.findOne(id);
         return schedule;
     }
-
-    public async findByEmail(email: string): Promise<Schedule | undefined> {
-        const schedule = await this.findOne({
-            where: { email },
-        });
-        return schedule;
-    }
 }
 
 export default ScheduleRepository;
