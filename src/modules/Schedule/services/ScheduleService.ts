@@ -1,13 +1,17 @@
+import AppError from '@shared/errors/AppError';
 import { getCustomRepository } from 'typeorm';
 import Schedule from '../entities/Schedule';
 import ScheduleRepository from '../repositories/ScheduleRepository';
 
 interface ScheduleData {
     id?: string;
-    name: string;
-    image: string;
-    phone: string;
-    email: string;
+    dayOfWeek: string;
+    hourStart: string;
+    hourEnd: string;
+    hourLunchStart: string;
+    hourLunchEnd: string;
+    provider: any;
+    active: boolean;
 }
 
 export default class ScheduleService {
@@ -63,15 +67,29 @@ export default class ScheduleService {
     public async update(scheduleData: ScheduleData): Promise<string> {
         const scheduleRepository = getCustomRepository(ScheduleRepository);
         if (!scheduleData.id) {
-            throw new Error('Necessario informar id');
+            throw new AppError('Necessario informar id');
         }
 
-        const alreadyExists = await scheduleRepository.findById(scheduleData.id);
-        if (!alreadyExists) {
-            throw new Error('É Necessário informar um id válido!');
+        const schedule = await scheduleRepository.findById(scheduleData.id);
+        if (!schedule) {
+            throw new AppError('É Necessário informar um id válido!');
         }
 
-        const schedule = await scheduleRepository.save(scheduleData);
+        if (schedule.dayOfWeek !== scheduleData.dayOfWeek) {
+            const isDayOfWeekAlreadyInUse = await scheduleRepository.findOne({
+                where: {
+                    dayOfWeek: scheduleData.dayOfWeek,
+                    provider: {
+                        id: scheduleData.provider,
+                    },
+                },
+            });
+            if (isDayOfWeekAlreadyInUse) {
+                throw new AppError('Não foi possivel fazer a alteração. Já existe um horario cadastrado com esse dia da semana!');
+            }
+        }
+
+        await scheduleRepository.save(scheduleData);
         return schedule.id;
     }
 
@@ -80,7 +98,7 @@ export default class ScheduleService {
         const exists = await scheduleRepository.findById(id);
 
         if (!exists) {
-            throw new Error('É necessário informar um id válido!');
+            throw new AppError('É necessário informar um id válido!');
         }
 
         await scheduleRepository.delete(id);
