@@ -15,6 +15,17 @@ export default class ProviderController {
         }
     }
 
+    public async getByFilter(request: Request, response: Response): Promise<Response> {
+        try {
+            const providerService = new ProviderService();
+            const listProviders = await providerService.getByFilter();
+            return response.json(listProviders);
+        } catch (e) {
+            console.log(e);
+            throw new AppError(e);
+        }
+    }
+
     public async getById(request: Request, response: Response): Promise<Response> {
         try {
             const providerService = new ProviderService();

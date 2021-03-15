@@ -14,6 +14,11 @@ class ProviderRepository extends Repository<Provider> {
         });
         return provider;
     }
+
+    public async findByFilter(): Promise<Provider[]> {
+        const providers = await this.find();
+        return providers;
+    }
 }
 
 export default ProviderRepository;
