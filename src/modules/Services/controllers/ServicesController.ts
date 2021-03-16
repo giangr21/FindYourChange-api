@@ -14,6 +14,18 @@ export default class ServicesController {
         }
     }
 
+    public async getServicesByFilter(request: Request, response: Response): Promise<Response> {
+        try {
+            const servicesService = new ServicesService();
+            const data = request.body;
+            const service = await servicesService.findServicesByFilter(data);
+            return response.json(service);
+        } catch (e) {
+            console.log(e);
+            throw new AppError(e);
+        }
+    }
+
     public async getById(request: Request, response: Response): Promise<Response> {
         try {
             const servicesService = new ServicesService();

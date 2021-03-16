@@ -15,8 +15,8 @@ class ProductRepository extends Repository<Product> {
         return product;
     }
 
-    public async getByFilter(filter: any): Promise<Product[]> {
-        const findMerchant = await this.createQueryBuilder('product')
+    public async findByFilter(filter: any): Promise<Product[]> {
+        const findProducts = await this.createQueryBuilder('product')
             .select(['product'])
             .orderBy('product.createdAt')
             .where('product.provider = :providerId', {
@@ -24,20 +24,20 @@ class ProductRepository extends Repository<Product> {
             });
 
         if (filter.value && filter.value.trim() !== '') {
-            findMerchant.andWhere('product.value = :value', {
+            findProducts.andWhere('product.value = :value', {
                 value: filter.value,
             });
         }
 
         if (filter.name && filter.name.trim() !== '') {
-            findMerchant.andWhere('product.name ilike :name', {
+            findProducts.andWhere('product.name ilike :name', {
                 name: `%${filter.name}%`,
             });
         }
 
-        const merchant = await findMerchant.getMany();
+        const products = await findProducts.getMany();
 
-        return merchant;
+        return products;
     }
 
     public async findByCategory(category: string): Promise<Product[] | undefined> {

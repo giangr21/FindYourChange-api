@@ -6,7 +6,10 @@ const servicesController = new ServicesController();
 
 servicesRouter.get('/', servicesController.index);
 servicesRouter.get('/:id', servicesController.getById);
-servicesRouter.post('/', servicesController.create);
+
+servicesRouter.post('/', servicesController.getServicesByFilter);
+servicesRouter.post('/add', servicesController.create);
+
 servicesRouter.put('/', servicesController.update);
 servicesRouter.delete('/:id', servicesController.delete);
 

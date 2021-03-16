@@ -23,6 +23,16 @@ export default class ServicesService {
         return service;
     }
 
+    public async findServicesByFilter(filter: any): Promise<Services[]> {
+        const servicesRepository = getCustomRepository(ServicesRepository);
+        if (!filter.providerId) {
+            throw new Error('Necessario informar um provider ID');
+        }
+
+        const clerks = await servicesRepository.findServicesByFilter(filter);
+        return clerks;
+    }
+
     public async findById(id: string): Promise<Services | undefined> {
         const servicesRepository = getCustomRepository(ServicesRepository);
         const service = await servicesRepository.findById(id);

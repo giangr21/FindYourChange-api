@@ -21,6 +21,19 @@ class ServicesRepository extends Repository<Services> {
         });
         return service;
     }
+
+    public async findServicesByFilter(filter: any): Promise<Services[]> {
+        const findServices = await this.createQueryBuilder('service')
+            .select(['service'])
+            .orderBy('service.createdAt')
+            .where('service.provider = :providerId', {
+                providerId: filter.providerId,
+            });
+
+        const services = await findServices.getMany();
+
+        return services;
+    }
 }
 
 export default ServicesRepository;

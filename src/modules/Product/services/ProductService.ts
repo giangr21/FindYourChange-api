@@ -28,7 +28,7 @@ export default class ProductService {
         if (!filter.providerId) {
             throw new Error('Necessario informar provider Id');
         }
-        const product = await productRepository.getByFilter(filter);
+        const product = await productRepository.findByFilter(filter);
         return product;
     }
 
