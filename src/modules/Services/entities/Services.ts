@@ -18,7 +18,7 @@ export default class Services {
     @Column({ type: 'numeric', nullable: true })
     disccount: number;
 
-    @Column({ type: 'varchar', length: 20 })
+    @Column({ type: 'varchar', length: 40, nullable: true })
     category: string;
 
     @Column({ type: 'varchar', length: 20 })
