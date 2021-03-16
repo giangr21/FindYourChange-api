@@ -19,6 +19,16 @@ export default class ClerkService {
         return clerk;
     }
 
+    public async findClerksByProviderId(id: string): Promise<Clerk[]> {
+        const clerkRepository = getCustomRepository(ClerkRepository);
+        if (!id) {
+            throw new Error('Necessario informar um provider ID');
+        }
+
+        const clerks = await clerkRepository.findClerksByProviderId(id);
+        return clerks;
+    }
+
     public async findById(id: string): Promise<Clerk | undefined> {
         const clerkRepository = getCustomRepository(ClerkRepository);
         const clerk = await clerkRepository.findById(id);

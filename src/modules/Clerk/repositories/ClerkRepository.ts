@@ -14,6 +14,19 @@ class ClerkRepository extends Repository<Clerk> {
         });
         return clerk;
     }
+
+    public async findClerksByProviderId(id: string): Promise<Clerk[]> {
+        const findClerk = await this.createQueryBuilder('clerk')
+            .select(['clerk'])
+            .orderBy('clerk.createdAt')
+            .where('clerk.provider = :id', {
+                id,
+            });
+
+        const clerks = await findClerk.getMany();
+
+        return clerks;
+    }
 }
 
 export default ClerkRepository;

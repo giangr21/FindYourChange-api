@@ -6,7 +6,10 @@ const clerkController = new ClerkController();
 
 clerkRouter.get('/', clerkController.index);
 clerkRouter.get('/:id', clerkController.getById);
+clerkRouter.get('/provider/:id', clerkController.getClerksByProviderId);
+
 clerkRouter.post('/', clerkController.create);
+
 clerkRouter.put('/', clerkController.update);
 clerkRouter.delete('/:id', clerkController.delete);
 

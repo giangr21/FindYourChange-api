@@ -14,6 +14,18 @@ export default class ClerkController {
         }
     }
 
+    public async getClerksByProviderId(request: Request, response: Response): Promise<Response> {
+        try {
+            const clerkService = new ClerkService();
+            const { id } = request.params;
+            const clerk = await clerkService.findClerksByProviderId(id);
+            return response.json(clerk);
+        } catch (e) {
+            console.log(e);
+            throw new AppError(e);
+        }
+    }
+
     public async getById(request: Request, response: Response): Promise<Response> {
         try {
             const clerkService = new ClerkService();
