@@ -27,6 +27,9 @@ export default class Services {
     @Column({ type: 'varchar', length: 120, nullable: true })
     image: string;
 
+    @Column({type: 'bool', default: false})
+    isPopularService: boolean;
+
     @ManyToOne(() => Provider, provider => provider.schedules)
     @JoinColumn({ name: 'provider_id' })
     provider: Provider;
