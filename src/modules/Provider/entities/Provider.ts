@@ -2,6 +2,7 @@ import Appointment from '@modules/Appointment/entities/Appointment';
 import Clerk from '@modules/Clerk/entities/Clerk';
 import Product from '@modules/Product/entities/Product';
 import Schedule from '@modules/Schedule/entities/Schedule';
+import Services from '@modules/Services/entities/Services';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { Exclude } from 'class-transformer';
 
@@ -89,4 +90,7 @@ export default class Provider {
 
     @OneToMany(() => Clerk, clerk => clerk.provider)
     clerks: Clerk[];
+
+    @OneToMany(() => Services, service => service.provider)
+    services: Services[];
 }
