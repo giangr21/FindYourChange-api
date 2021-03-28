@@ -53,7 +53,9 @@ export default class StorageUtil {
         if (fs.existsSync(path)) {
             return path;
         }
-
+        if (fs.existsSync(`src/assets/defaultImgs/${nome}`)) {
+            return `src/assets/defaultImgs/${nome}`;
+        }
         return pathFinder.resolve(__dirname, '..', 'assets', 'no-image.png');
     }
 
@@ -61,6 +63,9 @@ export default class StorageUtil {
         const path = `${process.env.STORAGE_PATH}/min/${nome}`;
         if (fs.existsSync(path)) {
             return path;
+        }
+        if (fs.existsSync(`src/assets/defaultImgs/min/${nome}`)) {
+            return `src/assets/defaultImgs/min/${nome}`;
         }
 
         return pathFinder.resolve(__dirname, '..', 'assets', 'no-image.png');
