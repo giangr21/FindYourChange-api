@@ -7,6 +7,7 @@ const providerController = new ProviderController();
 providerRouter.get('/', providerController.index);
 providerRouter.get('/:id', providerController.getById);
 providerRouter.get('/cities/all', providerController.getProvidersCities);
+providerRouter.get('/SpecificProvider/:id', providerController.getById);
 
 providerRouter.post('/', providerController.getByFilter);
 providerRouter.post('/add', providerController.create);

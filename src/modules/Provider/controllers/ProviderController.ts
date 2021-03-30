@@ -49,6 +49,18 @@ export default class ProviderController {
         }
     }
 
+    public async getByIdWithSpecificFields(request: Request, response: Response): Promise<Response> {
+        try {
+            const providerService = new ProviderService();
+            const { id } = request.params;
+            const provider = await providerService.findByIdWithSpecificFields(id);
+            return response.json(classToClass(provider));
+        } catch (e) {
+            console.log(e);
+            throw new AppError(e);
+        }
+    }
+
     public async create(request: Request, response: Response): Promise<Response> {
         try {
             const providerService = new ProviderService();
