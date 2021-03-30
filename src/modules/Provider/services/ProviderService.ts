@@ -45,6 +45,12 @@ export default class ProviderService {
         return provider;
     }
 
+    public async findByIdWithSpecificFields(id: string): Promise<Provider[]> {
+        const providerRepository = getCustomRepository(ProviderRepository);
+        const provider = await providerRepository.findByIdWithSpecificFields(id);
+        return provider;
+    }
+
     public async create(providerData: ProviderData): Promise<string> {
         const providerRepository = getCustomRepository(ProviderRepository);
         const alreadyExists = await providerRepository.findByEmail(providerData.email);
@@ -93,5 +99,11 @@ export default class ProviderService {
 
         await providerRepository.delete(id);
         return true;
+    }
+
+    public async getProvidersCities(): Promise<Provider[] | undefined> {
+        const providerRepository = getCustomRepository(ProviderRepository);
+        const providersCities = await providerRepository.findProviderCities();
+        return providersCities;
     }
 }

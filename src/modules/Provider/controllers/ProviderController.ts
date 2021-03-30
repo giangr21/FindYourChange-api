@@ -26,11 +26,34 @@ export default class ProviderController {
         }
     }
 
+    public async getProvidersCities(request: Request, response: Response): Promise<Response> {
+        try {
+            const providerService = new ProviderService();
+            const listCities = await providerService.getProvidersCities();
+            return response.json(listCities);
+        } catch (e) {
+            console.log(e);
+            throw new AppError(e);
+        }
+    }
+
     public async getById(request: Request, response: Response): Promise<Response> {
         try {
             const providerService = new ProviderService();
             const { id } = request.params;
             const provider = await providerService.findById(id);
+            return response.json(classToClass(provider));
+        } catch (e) {
+            console.log(e);
+            throw new AppError(e);
+        }
+    }
+
+    public async getByIdWithSpecificFields(request: Request, response: Response): Promise<Response> {
+        try {
+            const providerService = new ProviderService();
+            const { id } = request.params;
+            const provider = await providerService.findByIdWithSpecificFields(id);
             return response.json(classToClass(provider));
         } catch (e) {
             console.log(e);
