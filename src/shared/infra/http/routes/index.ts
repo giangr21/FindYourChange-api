@@ -1,6 +1,7 @@
 import { Router } from 'express';
 
 import providerRouter from '../../../../modules/Provider/routes/provider.routes';
+import providerImage from '../../../../modules/ProviderImage/routes/providerImage.routes';
 import userRouter from '../../../../modules/User/routes/user.routes';
 import sessionRouter from '../../../../modules/Sessions/routes/sessions.routes';
 import clerkRouter from '../../../../modules/Clerk/routes/clerk.routes';
@@ -12,6 +13,7 @@ import productRouter from '../../../../modules/Product/routes/productRouter.rout
 const routes = Router();
 
 routes.use('/provider', providerRouter);
+routes.use('/providerImages', providerImage);
 routes.use('/user', userRouter);
 routes.use('/sessions', sessionRouter);
 routes.use('/clerk', clerkRouter);
