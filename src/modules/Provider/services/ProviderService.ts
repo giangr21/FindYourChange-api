@@ -94,4 +94,10 @@ export default class ProviderService {
         await providerRepository.delete(id);
         return true;
     }
+
+    public async getProvidersCities(): Promise<Provider[] | undefined> {
+        const providerRepository = getCustomRepository(ProviderRepository);
+        const providersCities = await providerRepository.findProviderCities();
+        return providersCities;
+    }
 }
