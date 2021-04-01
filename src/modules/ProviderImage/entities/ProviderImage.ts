@@ -9,7 +9,7 @@ export default class ProviderImage {
     @Column({ type: 'varchar', length: 120, nullable: true })
     image: string;
 
-    @Column({ type: 'bool' })
+    @Column({ type: 'bool', name: 'default_image' })
     defaultImage: boolean;
 
     @ManyToOne(() => Provider, provider => provider.providerImages)

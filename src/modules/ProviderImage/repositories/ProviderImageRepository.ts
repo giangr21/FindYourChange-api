@@ -8,8 +8,17 @@ class ProviderImageRepository extends Repository<ProviderImage> {
         return providerImage;
     }
 
+    public async findByImageId(id: string): Promise<ProviderImage | undefined> {
+        const providerImage = await this.findOne({
+            where: {
+                image: id,
+            },
+        });
+        return providerImage;
+    }
+
     public async setAllImagesDefaultFalse(): Promise<void> {
-        await this.query("update provider_image set default = 'false'");
+        await this.query("UPDATE provider_image SET default_image = 'false'");
     }
 
     public async setDefaultImage(id: string): Promise<void> {

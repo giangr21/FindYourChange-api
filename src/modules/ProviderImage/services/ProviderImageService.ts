@@ -40,7 +40,7 @@ export default class ProviderImageService {
             throw new AppError('É necessário informar um id válido!');
         }
 
-        storageUtil.deleteFile(id);
+        storageUtil.deleteFile(alreadyExists.image);
 
         await providerImageRepository.delete(id);
         return true;
