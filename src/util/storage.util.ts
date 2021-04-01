@@ -43,8 +43,12 @@ export default class StorageUtil {
 
     public deleteFile(nome: string): void {
         const path = `${process.env.STORAGE_PATH}/${nome}`;
+        const pathMin = `${process.env.STORAGE_PATH}/min/${nome}`;
         if (fs.existsSync(path)) {
             fs.unlinkSync(path);
+        }
+        if (fs.existsSync(pathMin)) {
+            fs.unlinkSync(pathMin);
         }
     }
 
