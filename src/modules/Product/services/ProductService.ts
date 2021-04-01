@@ -32,6 +32,18 @@ export default class ProductService {
         return product;
     }
 
+    public async getProductsByFilter(filter: any): Promise<Product[]> {
+        const productRepository = getCustomRepository(ProductRepository);
+        const products = await productRepository.findByMarketplaceFilter(filter);
+        return products;
+    }
+
+    public async getAllProducts(): Promise<Product[] | undefined> {
+        const productRepository = getCustomRepository(ProductRepository);
+        const products = await productRepository.getAllProducts();
+        return products;
+    }
+
     public async findByCategory(category: string): Promise<Product[] | undefined> {
         const productRepository = getCustomRepository(ProductRepository);
         const productsArr = await productRepository.findByCategory(category);

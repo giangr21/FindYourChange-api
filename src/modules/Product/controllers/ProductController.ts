@@ -26,6 +26,29 @@ export default class ProductController {
         }
     }
 
+    public async getProductsByFilter(request: Request, response: Response): Promise<Response> {
+        try {
+            const productService = new ProductService();
+            const filter = request.body;
+            const listProduct = await productService.getProductsByFilter(filter);
+            return response.json(listProduct);
+        } catch (e) {
+            console.log(e);
+            throw new AppError(e);
+        }
+    }
+
+    public async getAllProducts(request: Request, response: Response): Promise<Response> {
+        try {
+            const productService = new ProductService();
+            const listProduct = await productService.getAllProducts();
+            return response.json(listProduct);
+        } catch (e) {
+            console.log(e);
+            throw new AppError(e);
+        }
+    }
+
     public async getById(request: Request, response: Response): Promise<Response> {
         try {
             const productService = new ProductService();
