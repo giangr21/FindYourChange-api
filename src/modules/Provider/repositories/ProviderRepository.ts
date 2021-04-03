@@ -16,8 +16,32 @@ class ProviderRepository extends Repository<Provider> {
     }
 
     public async findByFilter(): Promise<Provider[]> {
-        const providers = await this.find();
-        return providers;
+        const provider = await this.createQueryBuilder('provider')
+            .select([
+                'provider.id',
+                'provider.addressCity',
+                'provider.addressArea',
+                'provider.legalName',
+                'provider.phone',
+                'provider.isTattoo',
+                'provider.isPiercing',
+                'provider.isBarber',
+                'service.id',
+                'service.title',
+                'service.value',
+                'service.disccount',
+                'providerImage',
+            ])
+            .leftJoin('provider.services', 'service', 'service.isPopularService = true')
+            .leftJoin('provider.providerImages', 'providerImage', 'providerImage.defaultImage = true');
+
+        // CONDICOES DO FILTRO VAO IR AQUI \/
+
+        // if () ....
+
+        const services = await provider.getMany();
+
+        return services;
     }
 
     public async findProviderCities(): Promise<Provider[] | any> {
@@ -36,17 +60,16 @@ class ProviderRepository extends Repository<Provider> {
         return formatedCities;
     }
 
-    public async findByIdWithSpecificFields(id: string): Promise<Provider[]> {
+    public async findByIdWithSpecificFields(id: string): Promise<Provider | undefined> {
         const provider = await this.createQueryBuilder('provider')
             .select(['provider'])
             .leftJoin('provider.services', 'services')
             .leftJoin('provider.schedules', 'schedules')
             .where('provider.id = :providerId', {
                 providerId: id,
-            });
-        const services = await provider.getMany();
+            }).getOne();
 
-        return services;
+        return provider;
     }
 }
 

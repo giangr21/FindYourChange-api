@@ -18,6 +18,9 @@ export default class Provider {
     @Column({ type: 'varchar', length: 100, name: 'last_name' })
     lastName: string;
 
+    @Column({ type: 'varchar', length: 100, name: 'legal_name', default: '' })
+    legalName: string;
+
     @Column({ type: 'varchar', length: 13, nullable: true })
     phone: string;
 
