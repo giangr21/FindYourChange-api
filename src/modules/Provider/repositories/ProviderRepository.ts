@@ -36,17 +36,16 @@ class ProviderRepository extends Repository<Provider> {
         return formatedCities;
     }
 
-    public async findByIdWithSpecificFields(id: string): Promise<Provider[]> {
+    public async findByIdWithSpecificFields(id: string): Promise<Provider | undefined> {
         const provider = await this.createQueryBuilder('provider')
             .select(['provider'])
             .leftJoin('provider.services', 'services')
             .leftJoin('provider.schedules', 'schedules')
             .where('provider.id = :providerId', {
                 providerId: id,
-            });
-        const services = await provider.getMany();
+            }).getOne();
 
-        return services;
+        return provider;
     }
 }
 
