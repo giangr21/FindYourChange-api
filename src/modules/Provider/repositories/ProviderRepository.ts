@@ -53,7 +53,7 @@ class ProviderRepository extends Repository<Provider> {
                 label: city.provider_address_city,
             };
         });
-        formatedCities.push({
+        formatedCities.unshift({
             id: 'Todas',
             label: 'Todas',
         });
