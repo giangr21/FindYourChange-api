@@ -62,7 +62,14 @@ class ProviderRepository extends Repository<Provider> {
 
     public async findByIdWithSpecificFields(id: string): Promise<Provider | undefined> {
         const provider = await this.createQueryBuilder('provider')
-            .select(['provider'])
+            .select([
+                'provider.id', 'provider.addressArea', 'provider.addressCity', 'provider.addressNumber',
+                'provider.addressState', 'provider.addressStreet', 'provider.addressZipCode',
+                'provider.email', 'provider.isBarber', 'provider.isPiercing', 'provider.isTattoo',
+                'provider.legalName', 'provider.phone',
+                'services',
+                'schedules'
+            ])
             .leftJoin('provider.services', 'services')
             .leftJoin('provider.schedules', 'schedules')
             .where('provider.id = :providerId', {

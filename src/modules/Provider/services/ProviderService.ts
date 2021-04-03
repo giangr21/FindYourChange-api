@@ -9,6 +9,7 @@ interface ProviderData {
     id: string;
     name: string;
     lastName: string;
+    legalName: string;
     phone: string;
     email: string;
     password: string;
