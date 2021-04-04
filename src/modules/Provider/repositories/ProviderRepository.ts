@@ -15,7 +15,7 @@ class ProviderRepository extends Repository<Provider> {
         return provider;
     }
 
-    public async findByFilter(): Promise<Provider[]> {
+    public async findByFilter(filter: any): Promise<Provider[]> {
         const provider = await this.createQueryBuilder('provider')
             .select([
                 'provider.id',
@@ -35,12 +35,49 @@ class ProviderRepository extends Repository<Provider> {
             .leftJoin('provider.services', 'service', 'service.isPopularService = true')
             .leftJoin('provider.providerImages', 'providerImage', 'providerImage.defaultImage = true');
 
-        // CONDICOES DO FILTRO VAO IR AQUI \/
+        if (filter.category && filter.category.trim() !== '') {
+            // TODO: Filter flag hasAvailability.
+        }
 
-        // if () ....
+        if (filter.cities && filter.cities.trim() !== '' && filter.cities !== 'Todas') {
+            provider.andWhere('provider.addressCity like :city', {
+                city: filter.cities,
+            });
+        }
+
+        if (filter.category && filter.category.trim() !== '' && filter.category !== 'Todos') {
+            switch (filter.category) {
+                case 'Barbearia':
+                    provider.andWhere('provider.isBarber = true');
+                    break;
+
+                case 'BodyPiercing':
+                    provider.andWhere('provider.isPiercing = true');
+                    break;
+
+                case 'Tatuagem':
+                    provider.andWhere('provider.isTattoo = true');
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        if (filter.price && filter.price === '250+') {
+            const price = filter.price.split('+')[0];
+            provider.andWhere(`service.value >= :price`, {
+                price,
+            });
+        } else if (filter.price && filter.price !== 'Todos') {
+            const minPrice = filter.price.split('-')[0];
+            const maxPrice = filter.price.split('-')[1];
+            provider.andWhere(`service.value BETWEEN :minPrice AND :maxPrice`, {
+                minPrice,
+                maxPrice,
+            });
+        }
 
         const services = await provider.getMany();
-
         return services;
     }
 
@@ -63,18 +100,28 @@ class ProviderRepository extends Repository<Provider> {
     public async findByIdWithSpecificFields(id: string): Promise<Provider | undefined> {
         const provider = await this.createQueryBuilder('provider')
             .select([
-                'provider.id', 'provider.addressArea', 'provider.addressCity', 'provider.addressNumber',
-                'provider.addressState', 'provider.addressStreet', 'provider.addressZipCode',
-                'provider.email', 'provider.isBarber', 'provider.isPiercing', 'provider.isTattoo',
-                'provider.legalName', 'provider.phone',
+                'provider.id',
+                'provider.addressArea',
+                'provider.addressCity',
+                'provider.addressNumber',
+                'provider.addressState',
+                'provider.addressStreet',
+                'provider.addressZipCode',
+                'provider.email',
+                'provider.isBarber',
+                'provider.isPiercing',
+                'provider.isTattoo',
+                'provider.legalName',
+                'provider.phone',
                 'services',
-                'schedules'
+                'schedules',
             ])
             .leftJoin('provider.services', 'services')
             .leftJoin('provider.schedules', 'schedules')
             .where('provider.id = :providerId', {
                 providerId: id,
-            }).getOne();
+            })
+            .getOne();
 
         return provider;
     }

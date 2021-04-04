@@ -34,9 +34,9 @@ export default class ProviderService {
         return providers;
     }
 
-    public async getByFilter(): Promise<Provider[]> {
+    public async getByFilter(filter: any): Promise<Provider[]> {
         const providerRepository = getCustomRepository(ProviderRepository);
-        const providers = await providerRepository.findByFilter();
+        const providers = await providerRepository.findByFilter(filter);
         return providers;
     }
 
