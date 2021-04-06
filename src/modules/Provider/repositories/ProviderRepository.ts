@@ -39,6 +39,12 @@ class ProviderRepository extends Repository<Provider> {
             // TODO: Filter flag hasAvailability.
         }
 
+        if (filter.name && filter.name.trim() !== '') {
+            provider.andWhere('provider.legalName ilike :name', {
+                name: `%${filter.name}%`,
+            });
+        }
+
         if (filter.cities && filter.cities.trim() !== '' && filter.cities !== 'Todas') {
             provider.andWhere('provider.addressCity like :city', {
                 city: filter.cities,
