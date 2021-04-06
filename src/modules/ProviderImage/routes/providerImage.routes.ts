@@ -1,12 +1,12 @@
 import { Router } from 'express';
-import ClerkController from '../controllers/ProviderImageController';
+import ProviderImageController from '../controllers/ProviderImageController';
 
-const clerkRouter = Router();
-const clerkController = new ClerkController();
+const providerImageRouter = Router();
+const providerImageController = new ProviderImageController();
 
-clerkRouter.post('/', clerkController.create);
-clerkRouter.post('/updateDefaultImage/:id', clerkController.updateDefaultImage);
+providerImageRouter.post('/', providerImageController.create);
+providerImageRouter.post('/updateDefaultImage/:id', providerImageController.updateDefaultImage);
 
-clerkRouter.delete('/:id', clerkController.delete);
+providerImageRouter.delete('/:id', providerImageController.delete);
 
-export default clerkRouter;
+export default providerImageRouter;

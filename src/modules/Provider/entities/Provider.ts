@@ -6,6 +6,7 @@ import Services from '@modules/Services/entities/Services';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { Exclude } from 'class-transformer';
 import ProviderImage from '@modules/ProviderImage/entities/ProviderImage';
+import ProviderRecommendation from '@modules/ProviderRecommendation/entities/ProviderRecommendation';
 
 @Entity('provider')
 export default class Provider {
@@ -98,6 +99,9 @@ export default class Provider {
     @OneToMany(() => Services, service => service.provider)
     services: Services[];
 
-    @OneToMany(() => ProviderImage, service => service.provider, { eager: true })
+    @OneToMany(() => ProviderImage, providerImage => providerImage.provider, { eager: true })
     providerImages: ProviderImage[];
+
+    @OneToMany(() => ProviderRecommendation, providerRecommendation => providerRecommendation.provider)
+    providerRecommendations: ProviderRecommendation[];
 }

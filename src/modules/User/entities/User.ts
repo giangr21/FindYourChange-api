@@ -1,4 +1,5 @@
 import Appointment from '@modules/Appointment/entities/Appointment';
+import ProviderRecommendation from '@modules/ProviderRecommendation/entities/ProviderRecommendation';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity('user')
@@ -42,4 +43,7 @@ export default class User {
 
     @OneToMany(() => Appointment, appointment => appointment.user)
     appointments: Appointment[];
+
+    @OneToMany(() => ProviderRecommendation, providerRecommendation => providerRecommendation.user)
+    providerRecommendations: ProviderRecommendation[];
 }

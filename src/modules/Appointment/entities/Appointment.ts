@@ -24,8 +24,8 @@ export default class Appointment {
     @Column({ type: 'varchar', length: 40, name: 'service_type', nullable: true })
     serviceType: string;
 
-    @Column({ type: 'numeric', default: 0 })
-    rate: number;
+    @Column({ type: 'int4', default: 0 })
+    rating: number;
 
     @Column({ type: 'varchar', length: 240, name: 'notes', nullable: true })
     notes: string;
