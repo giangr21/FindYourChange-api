@@ -121,9 +121,13 @@ class ProviderRepository extends Repository<Provider> {
                 'provider.phone',
                 'services',
                 'schedules',
+                'providerImages',
+                'providerRecommendations',
             ])
             .leftJoin('provider.services', 'services')
             .leftJoin('provider.schedules', 'schedules')
+            .leftJoin('provider.providerImages', 'providerImages')
+            .leftJoin('provider.providerRecommendations', 'providerRecommendations')
             .where('provider.id = :providerId', {
                 providerId: id,
             })
