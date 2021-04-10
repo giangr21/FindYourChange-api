@@ -1,5 +1,8 @@
-import { EntityRepository, Repository } from 'typeorm';
+import Appointment from '@modules/Appointment/entities/Appointment';
+import { EntityRepository, getCustomRepository, Raw, Repository } from 'typeorm';
 import Provider from '../entities/Provider';
+import { MyAppointments } from '../services/ProviderService';
+import AppointmentRepository from '../../Appointment/repositories/AppointmentRepository';
 
 @EntityRepository(Provider)
 class ProviderRepository extends Repository<Provider> {
@@ -134,6 +137,40 @@ class ProviderRepository extends Repository<Provider> {
             .getOne();
 
         return provider;
+    }
+
+    public async findAllInMonthFromProvider({ providerId, month, year }: any): Promise<Appointment[]> {
+        const appointmentsRepository = getCustomRepository(AppointmentRepository);
+
+        const parsedMonth = String(month).padStart(2, '0');
+        const appointments = await appointmentsRepository.find({
+            where: {
+                provider: {
+                    id: providerId,
+                },
+                dateRelease: Raw(dateFieldName => `to_char(${dateFieldName}, 'MM-YYYY') = '${parsedMonth}-${year}'`),
+            },
+        });
+
+        return appointments;
+    }
+
+    public async findAllInDayFromProvider({ providerId, day, month, year }: MyAppointments): Promise<Appointment[]> {
+        const appointmentsRepository = getCustomRepository(AppointmentRepository);
+        const parsedDay = String(day).padStart(2, '0');
+        const parsedMonth = String(month).padStart(2, '0');
+
+        const appointments = await appointmentsRepository.find({
+            where: {
+                provider: {
+                    id: providerId,
+                },
+                dateRelease: Raw(dateFieldName => `to_char(${dateFieldName}, 'DD-MM-YYYY') = '${parsedDay}-${parsedMonth}-${year}'`),
+            },
+            relations: ['user'],
+        });
+
+        return appointments;
     }
 }
 

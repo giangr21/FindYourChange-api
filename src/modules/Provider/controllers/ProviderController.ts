@@ -62,6 +62,25 @@ export default class ProviderController {
         }
     }
 
+    public async getMyAppointments(request: Request, response: Response): Promise<Response> {
+        try {
+            const providerService = new ProviderService();
+            const { day, month, year, providerId } = request.query;
+
+            const appointments = await providerService.findMyAppointments({
+                providerId,
+                day: Number(day),
+                month: Number(month),
+                year: Number(year),
+            });
+
+            return response.json(appointments);
+        } catch (e) {
+            console.log(e);
+            throw new AppError(e);
+        }
+    }
+
     public async create(request: Request, response: Response): Promise<Response> {
         try {
             const providerService = new ProviderService();
