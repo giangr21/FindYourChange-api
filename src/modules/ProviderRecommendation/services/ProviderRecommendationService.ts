@@ -6,7 +6,6 @@ import ProviderRecommendationRepository from '../repositories/ProviderRecommenda
 interface ProviderRecommendationData {
     id: string;
     notes: string;
-    userName: string;
     user: any;
     provider: any;
     rating: number;
@@ -31,8 +30,8 @@ export default class ProviderRecommendationService {
     public async create(providerRecommendation: ProviderRecommendationData): Promise<string> {
         const providerImageRepository = getCustomRepository(ProviderRecommendationRepository);
 
-        const providerImage = await providerImageRepository.save(providerRecommendation);
-        return providerImage.id;
+        const providerReview = await providerImageRepository.save(providerRecommendation);
+        return providerReview.id;
     }
 
     public async delete(id: string): Promise<boolean> {
