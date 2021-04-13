@@ -10,9 +10,6 @@ export default class ProviderRecommendation {
     @Column({ type: 'varchar', length: 240, nullable: true })
     notes: string;
 
-    @Column({ type: 'varchar', length: 60, name: 'user_name', nullable: true })
-    userName: string;
-
     @Column({ type: 'int4', default: 0 })
     rating: number;
 
@@ -28,7 +25,6 @@ export default class ProviderRecommendation {
         name: 'created_at',
         type: 'timestamptz',
         default: () => 'now()',
-        select: false,
     })
     createdAt: Date;
 
