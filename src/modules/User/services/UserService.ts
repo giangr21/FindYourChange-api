@@ -28,14 +28,12 @@ class UserService {
 
     // }
 
-    // public async getById(id: string): Promise<User | undefined> {
-    //     const userRepository = getCustomRepository(UserRepository);
-    //     const centralRepository = getRepository(Central);
+    public async getById(id: string): Promise<User | undefined> {
+        const userRepository = getCustomRepository(UserRepository);
+        const user: any = await userRepository.findById(id);
 
-    //     const user: any = await userRepository.findById(id);
-
-    //     return user;
-    // }
+        return user;
+    }
 
     public async create(userData: Omit<IRequest, 'id'>): Promise<User> {
         const userRepository = getCustomRepository(UserRepository);

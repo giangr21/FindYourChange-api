@@ -20,7 +20,7 @@ export default class UserController {
             const userService = new UserService();
             const { id } = request.params;
             const user = await userService.getById(id);
-            return response.json(user);
+            return response.json(classToClass(user));
         } catch (e) {
             throw new AppError(e);
         }

@@ -1,5 +1,6 @@
 import Appointment from '@modules/Appointment/entities/Appointment';
 import ProviderRecommendation from '@modules/ProviderRecommendation/entities/ProviderRecommendation';
+import { Exclude } from 'class-transformer';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity('user')
@@ -19,6 +20,7 @@ export default class User {
     @Column({ type: 'varchar', length: 60 })
     email: string;
 
+    @Exclude()
     @Column({ type: 'varchar', length: 80 })
     password: string;
 
