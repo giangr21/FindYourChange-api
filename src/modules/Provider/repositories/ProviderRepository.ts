@@ -86,7 +86,12 @@ class ProviderRepository extends Repository<Provider> {
             });
         }
 
-        const services = await provider.getMany();
+        // const total = await totalTransaction.getMany();
+
+        const services = await provider
+            .skip((filter.page - 1) * 10)
+            .take(10)
+            .getMany();
         return services;
     }
 
