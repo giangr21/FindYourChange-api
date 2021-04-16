@@ -78,6 +78,11 @@ class UserService {
 
         await userRepository.delete({ id });
     }
+
+    public async findMyAppointments(userId: string): Promise<any> {
+        const userRepository = getCustomRepository(UserRepository);
+        return userRepository.findAllAppointmentsFromUser(userId);
+    }
 }
 
 export default UserService;

@@ -59,4 +59,18 @@ export default class UserController {
             throw new AppError(e);
         }
     }
+
+    public async getMyAppointments(request: Request, response: Response): Promise<Response> {
+        try {
+            const userService = new UserService();
+            const { id } = request.params;
+
+            const appointments = await userService.findMyAppointments(id);
+
+            return response.json(appointments);
+        } catch (e) {
+            console.log(e);
+            throw new AppError(e);
+        }
+    }
 }

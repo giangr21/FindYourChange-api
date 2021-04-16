@@ -11,4 +11,6 @@ userRouter.post('/', userController.create);
 userRouter.put('/', userController.update);
 userRouter.delete('/:id', userController.delete);
 
+userRouter.get('/appointments/:id', userController.getMyAppointments);
+
 export default userRouter;
