@@ -13,36 +13,36 @@ interface ProviderRecommendationData {
 
 export default class ProviderRecommendationService {
     public async findByProviderId(id: string): Promise<ProviderRecommendation[]> {
-        const providerImageRepository = getCustomRepository(ProviderRecommendationRepository);
-        return providerImageRepository.findByProviderId(id);
+        const providerRecommendationRepository = getCustomRepository(ProviderRecommendationRepository);
+        return providerRecommendationRepository.findByProviderId(id);
     }
 
     public async findByUserId(id: string): Promise<ProviderRecommendation[]> {
-        const providerImageRepository = getCustomRepository(ProviderRecommendationRepository);
-        return providerImageRepository.findByUserId(id);
+        const providerRecommendationRepository = getCustomRepository(ProviderRecommendationRepository);
+        return providerRecommendationRepository.findByUserId(id);
     }
 
     public async getPopularRecommendations(): Promise<ProviderRecommendation[]> {
-        const providerImageRepository = getCustomRepository(ProviderRecommendationRepository);
-        return providerImageRepository.getPopularRecommendations();
+        const providerRecommendationRepository = getCustomRepository(ProviderRecommendationRepository);
+        return providerRecommendationRepository.getPopularRecommendations();
     }
 
     public async create(providerRecommendation: ProviderRecommendationData): Promise<string> {
-        const providerImageRepository = getCustomRepository(ProviderRecommendationRepository);
+        const providerRecommendationRepository = getCustomRepository(ProviderRecommendationRepository);
 
-        const providerReview = await providerImageRepository.save(providerRecommendation);
+        const providerReview = await providerRecommendationRepository.save(providerRecommendation);
         return providerReview.id;
     }
 
     public async delete(id: string): Promise<boolean> {
-        const providerImageRepository = getCustomRepository(ProviderRecommendationRepository);
+        const providerRecommendationRepository = getCustomRepository(ProviderRecommendationRepository);
 
-        const alreadyExists = await providerImageRepository.findById(id);
+        const alreadyExists = await providerRecommendationRepository.findById(id);
         if (!alreadyExists) {
             throw new AppError('É necessário informar um id válido!');
         }
 
-        await providerImageRepository.delete(id);
+        await providerRecommendationRepository.delete(id);
         return true;
     }
 }

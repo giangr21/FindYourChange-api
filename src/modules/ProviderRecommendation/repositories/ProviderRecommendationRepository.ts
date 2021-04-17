@@ -20,14 +20,24 @@ class ProviderRecommendationRepository extends Repository<ProviderRecommendation
     }
 
     public async findByUserId(id: string): Promise<ProviderRecommendation[]> {
-        const providerRecommendations = await this.find({
-            where: {
-                user: {
-                    id,
-                },
-            },
+        const providerRecommendations = await this.createQueryBuilder('providerRecommendation')
+            .select('providerRecommendation')
+            .where('providerRecommendation.user = :id', {
+                id,
+            })
+            .leftJoinAndSelect('providerRecommendation.provider', 'prov')
+            .getMany();
+
+        const providerRecommendationToReturn = providerRecommendations.map((recommendation: any) => {
+            const providerLegalName = recommendation.provider.legalName;
+            delete recommendation.provider;
+            return {
+                ...recommendation,
+                providerLegalName,
+            };
         });
-        return providerRecommendations;
+
+        return providerRecommendationToReturn;
     }
 
     public async getPopularRecommendations(): Promise<ProviderRecommendation[]> {
@@ -37,9 +47,7 @@ class ProviderRecommendationRepository extends Repository<ProviderRecommendation
         //     providerId: filter.providerId,
         // });
 
-        const services = await providerRecommendations.getMany();
-
-        return services;
+        return providerRecommendations.getMany();
     }
 }
 
