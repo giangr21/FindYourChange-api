@@ -18,6 +18,33 @@ class ProviderRepository extends Repository<Provider> {
         return provider;
     }
 
+    public async findByServiceName(serviceName: any): Promise<Provider[]> {
+        const providers = await this.createQueryBuilder('provider')
+            .select([
+                'provider.id',
+                'provider.addressCity',
+                'provider.addressArea',
+                'provider.legalName',
+                'provider.phone',
+                'provider.isTattoo',
+                'provider.isPiercing',
+                'provider.isBarber',
+                'service.id',
+                'service.title',
+                'service.value',
+                'service.disccount',
+                'providerImage',
+            ])
+            .leftJoin('provider.services', 'service', 'service.isPopularService = true')
+            .leftJoin('provider.providerImages', 'providerImage', 'providerImage.defaultImage = true')
+            .where('service.title ilike :serviceName', {
+                serviceName: `%${serviceName.name}%`,
+            })
+            .getMany();
+
+        return providers;
+    }
+
     public async findByFilter(filter: any): Promise<Provider[]> {
         const provider = await this.createQueryBuilder('provider')
             .select([

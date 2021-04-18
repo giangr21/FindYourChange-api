@@ -47,6 +47,12 @@ export default class ProviderService {
         return providers;
     }
 
+    public async getByServiceName(serviceName: any): Promise<Provider[]> {
+        const providerRepository = getCustomRepository(ProviderRepository);
+        const listProviders = await providerRepository.findByServiceName(serviceName);
+        return listProviders;
+    }
+
     public async findById(id: string): Promise<Provider | undefined> {
         const providerRepository = getCustomRepository(ProviderRepository);
         const provider = await providerRepository.findById(id);

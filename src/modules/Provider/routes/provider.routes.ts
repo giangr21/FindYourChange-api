@@ -9,6 +9,7 @@ providerRouter.get('/:id', providerController.getById);
 providerRouter.get('/cities/all', providerController.getProvidersCities);
 providerRouter.get('/specificProvider/:id', providerController.getByIdWithSpecificFields);
 providerRouter.get('/appointments/me', providerController.getMyAppointments);
+providerRouter.get('/serviceType/:name', providerController.getByServiceName);
 
 providerRouter.post('/', providerController.getByFilter);
 providerRouter.post('/add', providerController.create);

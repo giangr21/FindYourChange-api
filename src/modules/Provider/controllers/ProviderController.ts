@@ -27,6 +27,18 @@ export default class ProviderController {
         }
     }
 
+    public async getByServiceName(request: Request, response: Response): Promise<Response> {
+        try {
+            const providerService = new ProviderService();
+            const serviceName = request.params;
+            const listProviders = await providerService.getByServiceName(serviceName);
+            return response.json(listProviders);
+        } catch (e) {
+            console.log(e);
+            throw new AppError(e);
+        }
+    }
+
     public async getProvidersCities(request: Request, response: Response): Promise<Response> {
         try {
             const providerService = new ProviderService();
