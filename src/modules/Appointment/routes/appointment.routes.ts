@@ -6,9 +6,11 @@ const appointmentController = new AppointmentController();
 
 appointmentRouter.get('/', appointmentController.index);
 appointmentRouter.get('/:id', appointmentController.getById);
+appointmentRouter.get('/user/:id', appointmentController.getByUserId);
 
-appointmentRouter.post('/', appointmentController.getServicesByFilter);
+appointmentRouter.post('/', appointmentController.getAppointmentsByFilter);
 appointmentRouter.post('/add', appointmentController.create);
+appointmentRouter.post('/isDayOfWeekAvailable', appointmentController.isDayOfWeekAvailable);
 
 appointmentRouter.put('/', appointmentController.update);
 appointmentRouter.delete('/:id', appointmentController.delete);

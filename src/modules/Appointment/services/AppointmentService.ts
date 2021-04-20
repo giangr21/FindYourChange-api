@@ -35,6 +35,37 @@ export default class AppointmentService {
         return service;
     }
 
+    public async getByUserId(id: string): Promise<Appointment[]> {
+        const appointmentRepository = getCustomRepository(AppointmentRepository);
+        const appointments = await appointmentRepository.find({
+            where: {
+                provider: {
+                    id,
+                },
+            },
+        });
+        return appointments;
+    }
+
+    public async isDayOfWeekAvailable(dayOfWeek: string, provider: string): Promise<boolean> {
+        const appointmentRepository = getCustomRepository(AppointmentRepository);
+
+        const found = await appointmentRepository.find({
+            where: {
+                dayOfWeek,
+                provider: {
+                    id: provider,
+                },
+            },
+        });
+
+        if (found.length > 0) {
+            return false;
+        }
+
+        return true;
+    }
+
     public async create(appointmentData: AppointmentData): Promise<string> {
         const appointmentRepository = getCustomRepository(AppointmentRepository);
         const service = await appointmentRepository.save(appointmentData);

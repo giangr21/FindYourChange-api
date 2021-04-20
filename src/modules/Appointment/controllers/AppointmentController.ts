@@ -14,7 +14,7 @@ export default class AppointmentController {
         }
     }
 
-    public async getServicesByFilter(request: Request, response: Response): Promise<Response> {
+    public async getAppointmentsByFilter(request: Request, response: Response): Promise<Response> {
         try {
             const appointmentService = new AppointmentService();
             const data = request.body;
@@ -32,6 +32,30 @@ export default class AppointmentController {
             const { id } = request.params;
             const appointment = await appointmentService.findById(id);
             return response.json(appointment);
+        } catch (e) {
+            console.log(e);
+            throw new AppError(e);
+        }
+    }
+
+    public async getByUserId(request: Request, response: Response): Promise<Response> {
+        try {
+            const appointmentService = new AppointmentService();
+            const { id } = request.params;
+            const appointment = await appointmentService.getByUserId(id);
+            return response.json(appointment);
+        } catch (e) {
+            console.log(e);
+            throw new AppError(e);
+        }
+    }
+
+    public async isDayOfWeekAvailable(request: Request, response: Response): Promise<Response> {
+        try {
+            const appointmentService = new AppointmentService();
+            const { providerId, dayOfWeek } = request.body;
+            const isAvailable = await appointmentService.isDayOfWeekAvailable(dayOfWeek, providerId);
+            return response.json(isAvailable);
         } catch (e) {
             console.log(e);
             throw new AppError(e);

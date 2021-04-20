@@ -27,6 +27,32 @@ class AppointmentRepository extends Repository<Appointment> {
 
         return appointments;
     }
+
+    public async findAppointmentByUser(filter: any): Promise<Appointment[]> {
+        const findAppointments = await this.createQueryBuilder('appointment')
+            .select(['appointment'])
+            .orderBy('appointment.createdAt')
+            .where('appointment.user.id = :user.id', {
+                providerId: filter.providerId,
+            });
+
+        const appointments = await findAppointments.getMany();
+
+        return appointments;
+    }
+
+    public async findAppointmentByServiceType(filter: any): Promise<Appointment[]> {
+        const findAppointments = await this.createQueryBuilder('appointment')
+            .select(['appointment'])
+            .orderBy('appointment.createdAt')
+            .where('appointment.serviceType = :serviceType', {
+                providerId: filter.providerId,
+            });
+
+        const appointments = await findAppointments.getMany();
+
+        return appointments;
+    }
 }
 
 export default AppointmentRepository;
