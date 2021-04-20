@@ -18,6 +18,9 @@ export default class Product {
     @Column({ type: 'varchar', length: 40, nullable: true })
     category: string;
 
+    @Column({ type: 'varchar', name: 'product_status', length: 40, nullable: true })
+    productStatus: string;
+
     @Column({ type: 'varchar', name: 'product_img', length: 120, nullable: true })
     productImage: string;
 

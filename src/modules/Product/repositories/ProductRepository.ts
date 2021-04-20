@@ -3,6 +3,18 @@ import Product from '../entities/Product';
 
 @EntityRepository(Product)
 class ProductRepository extends Repository<Product> {
+    public async findByIdWithRelations(id: string): Promise<Product | undefined> {
+        const findProduct = await this.createQueryBuilder('product')
+            .select(['product', 'provider.addressCity', 'provider.legalName', 'provider.addressState', 'provider.phone'])
+            .leftJoin('product.provider', 'provider')
+            .where('product.id = :id', {
+                id,
+            })
+            .getOne();
+
+        return findProduct;
+    }
+
     public async findById(id: string): Promise<Product | undefined> {
         const product = await this.findOne(id);
         return product;

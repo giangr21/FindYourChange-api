@@ -19,7 +19,7 @@ export default class ProductService {
 
     public async findById(id: string): Promise<Product | undefined> {
         const productRepository = getCustomRepository(ProductRepository);
-        const product = await productRepository.findById(id);
+        const product = await productRepository.findByIdWithRelations(id);
         return product;
     }
 
