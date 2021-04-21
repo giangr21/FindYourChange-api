@@ -47,6 +47,18 @@ class ProductRepository extends Repository<Product> {
             });
         }
 
+        if (filter.category && filter.category.trim() !== '' && filter.category !== 'Todas') {
+            findProducts.andWhere('product.category = :category', {
+                category: filter.category,
+            });
+        }
+
+        if (filter.productState && filter.productState.trim() !== '' && filter.productState !== 'Todos') {
+            findProducts.andWhere('product.productStatus = :productStatus', {
+                productStatus: filter.productState,
+            });
+        }
+
         const products = await findProducts.getMany();
 
         return products;
@@ -89,6 +101,13 @@ class ProductRepository extends Repository<Product> {
                 city: filter.cities,
             });
         }
+
+        if (filter.productState && filter.productState.trim() !== '' && filter.productState !== 'Todos') {
+            findProducts.andWhere('product.productStatus = :productStatus', {
+                productStatus: filter.productState,
+            });
+        }
+
         const products = await findProducts.getMany();
         return products;
     }

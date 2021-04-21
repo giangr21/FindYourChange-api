@@ -33,16 +33,27 @@ class ProviderRepository extends Repository<Provider> {
                 'service.title',
                 'service.value',
                 'service.disccount',
+                'service.isPopularService',
                 'providerImage',
             ])
-            .leftJoin('provider.services', 'service', 'service.isPopularService = true')
+            .leftJoin('provider.services', 'service')
             .leftJoin('provider.providerImages', 'providerImage', 'providerImage.defaultImage = true')
             .where('service.title ilike :serviceName', {
-                serviceName: `%${serviceName.name}%`,
+                serviceName: `%${serviceName.name.trim()}%`,
             })
             .getMany();
 
-        return providers;
+        const filteredList = providers.map((provider: any) => {
+            const services: any = [];
+            provider.services.forEach((service: any) => {
+                if (service.isPopularService) {
+                    services.push(service);
+                }
+            });
+            provider.services = services;
+            return provider;
+        });
+        return filteredList;
     }
 
     public async findByFilter(filter: any): Promise<Provider[]> {
