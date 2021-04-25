@@ -39,6 +39,18 @@ export default class ProviderController {
         }
     }
 
+    public async getDashboardInfo(request: Request, response: Response): Promise<Response> {
+        try {
+            const providerService = new ProviderService();
+            const { id } = request.params;
+            const dashboardInfo = await providerService.getDashboardInfo(id);
+            return response.json(dashboardInfo);
+        } catch (e) {
+            console.log(e);
+            throw new AppError(e);
+        }
+    }
+
     public async getProvidersCities(request: Request, response: Response): Promise<Response> {
         try {
             const providerService = new ProviderService();

@@ -30,8 +30,8 @@ export default class ServicesController {
         try {
             const servicesService = new ServicesService();
             const { id } = request.params;
-            const clerk = await servicesService.findById(id);
-            return response.json(clerk);
+            const service = await servicesService.findById(id);
+            return response.json(service);
         } catch (e) {
             console.log(e);
             throw new AppError(e);
