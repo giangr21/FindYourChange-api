@@ -18,6 +18,26 @@ class ProviderRepository extends Repository<Provider> {
         return provider;
     }
 
+    public async findDashboardInfo(providerId: any): Promise<any> {
+        const providerDashboardInfo = await this.createQueryBuilder('provider')
+            .select(['provider.id', 'service.id', 'product.id', 'appointment.id', 'providerRecommendation.id'])
+            .leftJoin('provider.services', 'service')
+            .leftJoin('provider.products', 'product')
+            .leftJoin('provider.appointments', 'appointment')
+            .leftJoin('provider.providerRecommendations', 'providerRecommendation')
+            .where('provider.id = :id', {
+                id: providerId,
+            })
+            .getOne();
+
+        return {
+            services: providerDashboardInfo?.services.length,
+            products: providerDashboardInfo?.products.length,
+            appointments: providerDashboardInfo?.appointments.length,
+            providerRecommendations: providerDashboardInfo?.providerRecommendations.length,
+        };
+    }
+
     public async findByServiceName(serviceName: any): Promise<Provider[]> {
         const providers = await this.createQueryBuilder('provider')
             .select([
@@ -44,14 +64,10 @@ class ProviderRepository extends Repository<Provider> {
             .getMany();
 
         const filteredList = providers.map((provider: any) => {
-            const services: any = [];
-            provider.services.forEach((service: any) => {
-                if (service.isPopularService) {
-                    services.push(service);
-                }
-            });
-            provider.services = services;
-            return provider;
+            return {
+                ...provider,
+                services: provider.services.filter((service: any) => service.isPopularService === true),
+            };
         });
         return filteredList;
     }

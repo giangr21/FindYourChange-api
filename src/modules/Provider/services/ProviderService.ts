@@ -53,6 +53,12 @@ export default class ProviderService {
         return listProviders;
     }
 
+    public async getDashboardInfo(providerId: any): Promise<Provider[]> {
+        const providerRepository = getCustomRepository(ProviderRepository);
+        const dashBoardInfo = await providerRepository.findDashboardInfo(providerId);
+        return dashBoardInfo;
+    }
+
     public async findById(id: string): Promise<Provider | undefined> {
         const providerRepository = getCustomRepository(ProviderRepository);
         const provider = await providerRepository.findById(id);
