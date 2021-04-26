@@ -1,5 +1,6 @@
+import Appointment from '@modules/Appointment/entities/Appointment';
 import Provider from '@modules/Provider/entities/Provider';
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 
 @Entity('services')
 export default class Services {
@@ -33,6 +34,9 @@ export default class Services {
     @ManyToOne(() => Provider, provider => provider.schedules)
     @JoinColumn({ name: 'provider_id' })
     provider: Provider;
+
+    @OneToMany(() => Appointment, appointment => appointment.service)
+    appointments: Appointment[];
 
     @CreateDateColumn({
         name: 'created_at',

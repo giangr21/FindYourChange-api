@@ -1,4 +1,6 @@
+import Clerk from '@modules/Clerk/entities/Clerk';
 import Provider from '@modules/Provider/entities/Provider';
+import Services from '@modules/Services/entities/Services';
 import User from '@modules/User/entities/User';
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
 
@@ -11,21 +13,20 @@ export default class Appointment {
     @JoinColumn({ name: 'provider_id' })
     provider: Provider;
 
+    @ManyToOne(() => Clerk, clerk => clerk.appointments)
+    @JoinColumn({ name: 'clerk_id' })
+    clerk: Clerk;
+
+    @ManyToOne(() => Services, service => service.appointments)
+    @JoinColumn({ name: 'service_id' })
+    service: Services;
+
     @ManyToOne(() => User, user => user.appointments)
     @JoinColumn({ name: 'user_id' })
     user: User;
 
-    @Column({ type: 'timestamptz', name: 'date_release', default: () => 'now()' })
-    dateRelease: Date;
-
-    @Column({ type: 'numeric', default: 0 })
-    value: number;
-
-    @Column({ type: 'varchar', length: 40, name: 'service_type', nullable: true })
-    serviceType: string;
-
-    @Column({ type: 'int4', default: 0 })
-    rating: number;
+    @Column({ type: 'timestamptz', name: 'date_appointment', nullable: false })
+    dateAppointment: Date;
 
     @Column({ type: 'varchar', length: 240, name: 'notes', nullable: true })
     notes: string;
@@ -34,7 +35,6 @@ export default class Appointment {
         name: 'created_at',
         type: 'timestamptz',
         default: () => 'now()',
-        select: false,
     })
     createdAt: Date;
 
