@@ -1,6 +1,6 @@
 import AppError from '@shared/errors/AppError';
 import StorageUtil from '@util/storage.util';
-import { getCustomRepository } from 'typeorm';
+import { getConnection, getCustomRepository } from 'typeorm';
 import Services from '../entities/Services';
 import ServicesRepository from '../repositories/ServicesRepository';
 
@@ -14,6 +14,7 @@ interface ServicesData {
     time: string;
     image: string;
     provider: any;
+    clerks: any;
 }
 
 export default class ServicesService {
@@ -41,7 +42,10 @@ export default class ServicesService {
 
     public async create(servicesData: ServicesData): Promise<string> {
         const servicesRepository = getCustomRepository(ServicesRepository);
+
         const service = await servicesRepository.save(servicesData);
+        await getConnection().createQueryBuilder().relation(Services, 'clerks').of(service).add(servicesData.clerks);
+
         return service.id;
     }
 
@@ -58,6 +62,12 @@ export default class ServicesService {
         if (servicesData.image && servicesData.image !== service.image) {
             await storageUtil.deleteFile(service.image);
         }
+
+        const { clerks: clerksId } = servicesData;
+        delete servicesData.clerks;
+
+        await getConnection().createQueryBuilder().relation(Services, 'clerks').of(service.id).remove(service.clerks);
+        await getConnection().createQueryBuilder().relation(Services, 'clerks').of(service).add(clerksId);
 
         const newService = await servicesRepository.save(servicesData);
         return newService.id;

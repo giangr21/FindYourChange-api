@@ -1,6 +1,18 @@
 import Appointment from '@modules/Appointment/entities/Appointment';
+import Clerk from '@modules/Clerk/entities/Clerk';
 import Provider from '@modules/Provider/entities/Provider';
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
+import {
+    Entity,
+    Column,
+    PrimaryGeneratedColumn,
+    CreateDateColumn,
+    UpdateDateColumn,
+    ManyToOne,
+    JoinColumn,
+    OneToMany,
+    ManyToMany,
+    JoinTable,
+} from 'typeorm';
 
 @Entity('services')
 export default class Services {
@@ -31,12 +43,26 @@ export default class Services {
     @Column({ type: 'bool', default: false })
     isPopularService: boolean;
 
-    @ManyToOne(() => Provider, provider => provider.schedules)
+    @ManyToOne(() => Provider, provider => provider.services)
     @JoinColumn({ name: 'provider_id' })
     provider: Provider;
 
     @OneToMany(() => Appointment, appointment => appointment.service)
     appointments: Appointment[];
+
+    @ManyToMany(() => Clerk, clerk => clerk.services, { onDelete: 'CASCADE', eager: true })
+    @JoinTable({
+        name: 'service_clerk',
+        joinColumn: {
+            name: 'service_id',
+            referencedColumnName: 'id',
+        },
+        inverseJoinColumn: {
+            name: 'clerk_id',
+            referencedColumnName: 'id',
+        },
+    })
+    clerks: Clerk[];
 
     @CreateDateColumn({
         name: 'created_at',
