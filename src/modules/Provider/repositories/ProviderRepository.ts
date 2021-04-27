@@ -212,7 +212,7 @@ class ProviderRepository extends Repository<Provider> {
                 provider: {
                     id: providerId,
                 },
-                dateRelease: Raw(dateFieldName => `to_char(${dateFieldName}, 'MM-YYYY') = '${parsedMonth}-${year}'`),
+                dateAppointment: Raw(dateFieldName => `to_char(${dateFieldName}, 'MM-YYYY') = '${parsedMonth}-${year}'`),
             },
         });
 
@@ -229,7 +229,7 @@ class ProviderRepository extends Repository<Provider> {
                 provider: {
                     id: providerId,
                 },
-                dateRelease: Raw(dateFieldName => `to_char(${dateFieldName}, 'DD-MM-YYYY') = '${parsedDay}-${parsedMonth}-${year}'`),
+                dateAppointment: Raw(dateFieldName => `to_char(${dateFieldName}, 'DD-MM-YYYY') = '${parsedDay}-${parsedMonth}-${year}'`),
             },
             relations: ['user'],
         });

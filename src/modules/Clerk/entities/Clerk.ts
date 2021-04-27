@@ -1,6 +1,18 @@
 import ClerkSchedule from '@modules/ClerkSchedule/entities/ClerkSchedule';
+import Appointment from '@modules/Appointment/entities/Appointment';
 import Provider from '@modules/Provider/entities/Provider';
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne, CreateDateColumn, UpdateDateColumn, JoinColumn } from 'typeorm';
+import Services from '@modules/Services/entities/Services';
+import {
+    Entity,
+    Column,
+    PrimaryGeneratedColumn,
+    ManyToOne,
+    CreateDateColumn,
+    UpdateDateColumn,
+    JoinColumn,
+    OneToMany,
+    ManyToMany,
+} from 'typeorm';
 
 @Entity('clerk')
 export default class Clerk {
@@ -35,10 +47,16 @@ export default class Clerk {
     })
     updatedAt: Date;
 
-    @ManyToOne(() => Provider, provider => provider.products)
+    @ManyToOne(() => Provider, provider => provider.clerks)
     @JoinColumn({ name: 'provider_id' })
     provider: Provider;
 
     @OneToMany(() => ClerkSchedule, clerkSchedule => clerkSchedule.clerk)
     clerkSchedules: ClerkSchedule[];
+
+    @OneToMany(() => Appointment, appointment => appointment.clerk)
+    appointments: Appointment[];
+
+    @ManyToMany(() => Services, service => service.clerks)
+    services: Services[];
 }
