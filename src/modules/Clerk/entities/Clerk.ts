@@ -1,5 +1,6 @@
+import ClerkSchedule from '@modules/ClerkSchedule/entities/ClerkSchedule';
 import Provider from '@modules/Provider/entities/Provider';
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, CreateDateColumn, UpdateDateColumn, JoinColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne, CreateDateColumn, UpdateDateColumn, JoinColumn } from 'typeorm';
 
 @Entity('clerk')
 export default class Clerk {
@@ -37,4 +38,7 @@ export default class Clerk {
     @ManyToOne(() => Provider, provider => provider.products)
     @JoinColumn({ name: 'provider_id' })
     provider: Provider;
+
+    @OneToMany(() => ClerkSchedule, clerkSchedule => clerkSchedule.clerk)
+    clerkSchedules: ClerkSchedule[];
 }
