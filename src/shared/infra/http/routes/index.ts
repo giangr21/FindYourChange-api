@@ -10,6 +10,7 @@ import storageRouter from '../../../../modules/Storage/routes/storage.routes';
 import servicesRouter from '../../../../modules/Services/routes/services.routes';
 import productRouter from '../../../../modules/Product/routes/productRouter.routes';
 import providerRecommendationRouter from '../../../../modules/ProviderRecommendation/routes/providerRecommendation.routes';
+import clerkScheduleRouter from '../../../../modules/ClerkSchedule/routes/clerkSchedule.routes';
 
 const routes = Router();
 
@@ -23,5 +24,6 @@ routes.use('/storage', storageRouter);
 routes.use('/services', servicesRouter);
 routes.use('/products', productRouter);
 routes.use('/providerRecommendation', providerRecommendationRouter);
+routes.use('/clerkschedule', clerkScheduleRouter);
 
 export default routes;
