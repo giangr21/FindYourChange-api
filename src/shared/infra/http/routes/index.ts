@@ -11,6 +11,7 @@ import servicesRouter from '../../../../modules/Services/routes/services.routes'
 import productRouter from '../../../../modules/Product/routes/productRouter.routes';
 import providerRecommendationRouter from '../../../../modules/ProviderRecommendation/routes/providerRecommendation.routes';
 import clerkScheduleRouter from '../../../../modules/ClerkSchedule/routes/clerkSchedule.routes';
+import appointmentRouter from '../../../../modules/Appointment/routes/appointment.routes';
 
 const routes = Router();
 
@@ -25,5 +26,6 @@ routes.use('/services', servicesRouter);
 routes.use('/products', productRouter);
 routes.use('/providerRecommendation', providerRecommendationRouter);
 routes.use('/clerkschedule', clerkScheduleRouter);
+routes.use('/appointment', appointmentRouter);
 
 export default routes;
