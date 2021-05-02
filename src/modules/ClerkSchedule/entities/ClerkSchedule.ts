@@ -15,13 +15,7 @@ export default class ClerkSchedule {
     @Column({ type: 'varchar', length: 10, name: 'hour_end' })
     hourEnd: string;
 
-    @Column({ type: 'varchar', length: 10, name: 'hour_lunch_start' })
-    hourLunchStart: string;
-
-    @Column({ type: 'varchar', length: 10, name: 'hour_lunch_end' })
-    hourLunchEnd: string;
-
-    @Column({ type: 'bool', default: false })
+    @Column({ type: 'bool', default: true })
     active: boolean;
 
     @ManyToOne(() => Clerk, clerk => clerk.clerkSchedules)
