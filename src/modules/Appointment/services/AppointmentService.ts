@@ -31,8 +31,8 @@ export default class AppointmentService {
 
     public async findById(id: string): Promise<Appointment | undefined> {
         const appointmentRepository = getCustomRepository(AppointmentRepository);
-        const service = await appointmentRepository.findById(id);
-        return service;
+        const appointment = await appointmentRepository.findById(id);
+        return appointment;
     }
 
     public async getByUserId(id: string): Promise<Appointment[]> {
@@ -68,8 +68,8 @@ export default class AppointmentService {
 
     public async create(appointmentData: AppointmentData): Promise<string> {
         const appointmentRepository = getCustomRepository(AppointmentRepository);
-        const service = await appointmentRepository.save(appointmentData);
-        return service.id;
+        const appointment = await appointmentRepository.save(appointmentData);
+        return appointment.id;
     }
 
     public async update(appointmentData: AppointmentData): Promise<string> {

@@ -1,8 +1,10 @@
 import Appointment from '@modules/Appointment/entities/Appointment';
 import { EntityRepository, getCustomRepository, Raw, Repository } from 'typeorm';
+import moment from 'moment';
 import Provider from '../entities/Provider';
 import { MyAppointments } from '../services/ProviderService';
 import AppointmentRepository from '../../Appointment/repositories/AppointmentRepository';
+import StorageUtil from '../../../util/storage.util';
 
 @EntityRepository(Provider)
 class ProviderRepository extends Repository<Provider> {
@@ -165,8 +167,9 @@ class ProviderRepository extends Repository<Provider> {
         return formatedCities;
     }
 
-    public async findByIdWithSpecificFields(id: string): Promise<Provider | undefined> {
-        const provider = await this.createQueryBuilder('provider')
+    public async findByIdWithSpecificFields(id: string): Promise<any> {
+        const storageUtil = new StorageUtil();
+        const provider: any = await this.createQueryBuilder('provider')
             .select([
                 'provider.id',
                 'provider.addressArea',
@@ -182,6 +185,7 @@ class ProviderRepository extends Repository<Provider> {
                 'provider.legalName',
                 'provider.phone',
                 'services',
+                'clerks',
                 'schedules',
                 'providerImages',
                 'providerRecommendations',
@@ -191,6 +195,7 @@ class ProviderRepository extends Repository<Provider> {
                 'userFromProviderRecommendation.lastName',
             ])
             .leftJoin('provider.services', 'services')
+            .leftJoin('services.clerks', 'clerks')
             .leftJoin('provider.schedules', 'schedules')
             .leftJoin('provider.providerImages', 'providerImages')
             .leftJoin('provider.providerRecommendations', 'providerRecommendations')
@@ -199,6 +204,37 @@ class ProviderRepository extends Repository<Provider> {
                 providerId: id,
             })
             .getOne();
+
+        if (provider) {
+            provider.isPopular = [];
+            provider.isNotPopular = [];
+
+            for (let index = 0; index < provider.providerRecommendations.length; index++) {
+                const providerRecommendation = provider.providerRecommendations[index];
+
+                providerRecommendation.user.avatar = storageUtil.TransformImgToBase64(providerRecommendation.user.avatar);
+                providerRecommendation.createdAt = moment(providerRecommendation.createdAt).format('DD/MM/YYYY - HH:mm');
+            }
+
+            for (let index = 0; index < provider.providerImages.length; index++) {
+                const providerImage = provider.providerImages[index];
+
+                const imgBase64 = storageUtil.TransformImgToBase64(providerImage.image);
+                providerImage.imageBase64 = imgBase64;
+                if (providerImage.defaultImage) provider.providerDefaultImg = imgBase64;
+            }
+
+            for (let index = 0; index < provider.services.length; index++) {
+                const service = provider.services[index];
+
+                if (service.isPopularService) provider.isPopular.push(service);
+                else provider.isNotPopular.push(service);
+
+                service.clerks.forEach((clerk: any) => {
+                    clerk.avatar = storageUtil.TransformImgToBase64(clerk.avatar);
+                });
+            }
+        }
 
         return provider;
     }

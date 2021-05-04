@@ -74,4 +74,10 @@ export default class StorageUtil {
 
         return pathFinder.resolve(__dirname, '..', 'assets', 'no-image.png');
     }
+
+    public TransformImgToBase64(nome: string): any {
+        const img = this.getFileMin(nome);
+        const contents = fs.readFileSync(img, { encoding: 'base64' });
+        return contents;
+    }
 }
