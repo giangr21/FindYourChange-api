@@ -16,8 +16,18 @@ export default class ClerkScheduleService {
 
     public async create(clerkSchedule: any): Promise<string> {
         const clerkScheduleRepository = getCustomRepository(ClerkScheduleRepository);
-
-        const clerkScheduleRep = await clerkScheduleRepository.save(clerkSchedule);
+        const clerkId = clerkSchedule.shift();
+        const clerkScheduleArr = clerkSchedule.map((clerkObj: any) => {
+            return {
+                ...clerkObj,
+                clerk: clerkId,
+            };
+        });
+        let clerkScheduleRep: any;
+        for (let i = 0; i < clerkScheduleArr.length; i++) {
+            // eslint-disable-next-line no-await-in-loop
+            clerkScheduleRep = await clerkScheduleRepository.save(clerkScheduleArr[i]);
+        }
         return clerkScheduleRep.id;
     }
 
