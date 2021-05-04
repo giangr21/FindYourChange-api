@@ -19,9 +19,27 @@ class UserRepository extends Repository<User> {
 
     public async findAllAppointmentsFromUser(userId: string): Promise<Appointment[]> {
         const appointmentsRepository = getCustomRepository(AppointmentRepository);
-        const appointments = await appointmentsRepository.find({
-            where: { user: { id: userId } },
-        });
+        const findAppointments = await appointmentsRepository
+            .createQueryBuilder('appointment')
+            .select([
+                'appointment',
+                'clerk.id',
+                'clerk.name',
+                'service.id',
+                'service.value',
+                'service.disccount',
+                'service.title',
+                'service.category',
+            ])
+            .innerJoin('appointment.clerk', 'clerk')
+            .innerJoin('appointment.service', 'service')
+            .orderBy('appointment.createdAt')
+            .where('appointment.user = :userId', {
+                userId,
+            });
+
+        const appointments = await findAppointments.getMany();
+
         return appointments;
     }
 }
