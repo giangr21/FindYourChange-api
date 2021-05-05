@@ -4,10 +4,10 @@ import ClerkSchedule from '../entities/ClerkSchedule';
 import ClerkScheduleRepository from '../repositories/clerkScheduleRepository';
 
 export default class ClerkScheduleService {
-    public async findByProviderId(id: string): Promise<ClerkSchedule[]> {
+    public async findScheduleByClerkId(id: string): Promise<ClerkSchedule[]> {
         try {
             const clerkScheduleRepository = getCustomRepository(ClerkScheduleRepository);
-            return clerkScheduleRepository.findByProviderId(id);
+            return clerkScheduleRepository.findScheduleByClerkId(id);
         } catch (e) {
             console.log(e);
             throw new AppError(e);
@@ -16,30 +16,30 @@ export default class ClerkScheduleService {
 
     public async create(clerkSchedule: any): Promise<string> {
         const clerkScheduleRepository = getCustomRepository(ClerkScheduleRepository);
-        const clerkId = clerkSchedule.shift();
-        const clerkScheduleArr = clerkSchedule.map((clerkObj: any) => {
-            return {
-                ...clerkObj,
-                clerk: clerkId,
-            };
-        });
-        let clerkScheduleRep: any;
-        for (let i = 0; i < clerkScheduleArr.length; i++) {
-            // eslint-disable-next-line no-await-in-loop
-            clerkScheduleRep = await clerkScheduleRepository.save(clerkScheduleArr[i]);
+        const clerkScheduleRep = await clerkScheduleRepository.saveClerkSchedule(clerkSchedule);
+        return clerkScheduleRep;
+    }
+
+    public async update(clerkSchedule: any): Promise<string> {
+        const clerkRepository = getCustomRepository(ClerkScheduleRepository);
+        const clerkScheduleRep = await clerkRepository.findScheduleByClerkId(clerkSchedule[0]);
+        if (!clerkScheduleRep) {
+            throw new AppError('Atendente sem agenda cadastrada!');
         }
-        return clerkScheduleRep.id;
+        await clerkRepository.deleteByProviderId(clerkSchedule[0]);
+        const newClerkSchedule = await clerkRepository.saveClerkSchedule(clerkSchedule);
+        return newClerkSchedule;
     }
 
     public async delete(id: string): Promise<boolean> {
         const clerkScheduleRepository = getCustomRepository(ClerkScheduleRepository);
 
-        const alreadyExists = await clerkScheduleRepository.findById(id);
+        const alreadyExists = await clerkScheduleRepository.findScheduleByClerkId(id);
         if (!alreadyExists) {
             throw new AppError('É necessário informar um id válido!');
         }
 
-        await clerkScheduleRepository.delete(id);
+        await clerkScheduleRepository.deleteByProviderId(id);
         return true;
     }
 }
