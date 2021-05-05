@@ -6,10 +6,8 @@ import UserService from '../services/UserService';
 export default class UserController {
     public async index(request: Request, response: Response): Promise<Response> {
         try {
-            const userService = new UserService();
-            const listUsers = await userService.get();
             // return response.json(classToClass(listUsers));
-            return response.json(listUsers);
+            return response.json({});
         } catch (e) {
             throw new AppError(e);
         }
