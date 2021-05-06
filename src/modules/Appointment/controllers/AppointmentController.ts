@@ -50,6 +50,18 @@ export default class AppointmentController {
         }
     }
 
+    public async getByProviderId(request: Request, response: Response): Promise<Response> {
+        try {
+            const appointmentService = new AppointmentService();
+            const { id } = request.params;
+            const appointment = await appointmentService.getByProviderId(id);
+            return response.json(appointment);
+        } catch (e) {
+            console.log(e);
+            throw new AppError(e);
+        }
+    }
+
     public async isDayOfWeekAvailable(request: Request, response: Response): Promise<Response> {
         try {
             const appointmentService = new AppointmentService();

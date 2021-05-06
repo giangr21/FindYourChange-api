@@ -47,6 +47,12 @@ export default class AppointmentService {
         return appointments;
     }
 
+    public async getByProviderId(id: string): Promise<Appointment[]> {
+        const appointmentRepository = getCustomRepository(AppointmentRepository);
+        const appointments = await appointmentRepository.findAppointmentByProviderId(id);
+        return appointments;
+    }
+
     public async isDayOfWeekAvailable(dayOfWeek: string, provider: string): Promise<boolean> {
         const appointmentRepository = getCustomRepository(AppointmentRepository);
 
