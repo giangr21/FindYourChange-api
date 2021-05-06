@@ -267,7 +267,7 @@ class ProviderRepository extends Repository<Provider> {
                 },
                 dateAppointment: Raw(dateFieldName => `to_char(${dateFieldName}, 'DD-MM-YYYY') = '${parsedDay}-${parsedMonth}-${year}'`),
             },
-            relations: ['user'],
+            relations: ['user', 'service'],
         });
 
         return appointments;
