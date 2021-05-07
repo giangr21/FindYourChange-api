@@ -7,6 +7,7 @@ const appointmentController = new AppointmentController();
 appointmentRouter.get('/', appointmentController.index);
 appointmentRouter.get('/:id', appointmentController.getById);
 appointmentRouter.get('/user/:id', appointmentController.getByUserId);
+appointmentRouter.get('/provider/:id', appointmentController.getByProviderId);
 
 appointmentRouter.post('/', appointmentController.getAppointmentsByFilter);
 appointmentRouter.post('/add', appointmentController.create);

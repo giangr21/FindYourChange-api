@@ -28,6 +28,21 @@ class AppointmentRepository extends Repository<Appointment> {
         return appointments;
     }
 
+    public async findAppointmentByProviderId(idProvider: any): Promise<Appointment[]> {
+        const findAppointments = await this.createQueryBuilder('appointment')
+            .select(['appointment.id', 'appointment.dateAppointment', 'service.title', 'service.value', 'clerk.name', 'user.name'])
+            .leftJoin('appointment.provider', 'provider')
+            .leftJoin('appointment.service', 'service')
+            .leftJoin('appointment.clerk', 'clerk')
+            .leftJoin('appointment.user', 'user')
+            .where('appointment.provider.id = :providerId', {
+                providerId: idProvider,
+            });
+
+        const appointments = await findAppointments.getMany();
+        return appointments;
+    }
+
     public async findAppointmentByUser(filter: any): Promise<Appointment[]> {
         const findAppointments = await this.createQueryBuilder('appointment')
             .select(['appointment'])

@@ -30,9 +30,11 @@ class UserRepository extends Repository<User> {
                 'service.disccount',
                 'service.title',
                 'service.category',
+                'provider.id',
             ])
             .innerJoin('appointment.clerk', 'clerk')
             .innerJoin('appointment.service', 'service')
+            .innerJoin('appointment.provider', 'provider')
             .orderBy('appointment.createdAt')
             .where('appointment.user = :userId', {
                 userId,
