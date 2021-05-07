@@ -11,7 +11,7 @@ class ClerkScheduleRepository extends Repository<ClerkSchedule> {
     public async findScheduleByClerkId(id: string): Promise<ClerkSchedule[]> {
         const businessHours = await this.find({
             where: {
-                provider: {
+                clerk: {
                     id,
                 },
             },
