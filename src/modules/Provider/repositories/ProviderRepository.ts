@@ -41,7 +41,7 @@ class ProviderRepository extends Repository<Provider> {
     }
 
     public async findByServiceName(serviceName: any): Promise<Provider[]> {
-        const providers = await this.createQueryBuilder('provider')
+        const providersQuery = await this.createQueryBuilder('provider')
             .select([
                 'provider.id',
                 'provider.addressCity',
@@ -59,11 +59,22 @@ class ProviderRepository extends Repository<Provider> {
                 'providerImage',
             ])
             .leftJoin('provider.services', 'service')
-            .leftJoin('provider.providerImages', 'providerImage', 'providerImage.defaultImage = true')
-            .where('service.title ilike :serviceName', {
+            .leftJoin('provider.providerImages', 'providerImage', 'providerImage.defaultImage = true');
+
+        if (serviceName.name !== 'isBarber' && serviceName.name !== 'isTattoo' && serviceName.name !== 'isPiercing') {
+            providersQuery.where('service.title ilike :serviceName', {
                 serviceName: `%${serviceName.name.trim()}%`,
-            })
-            .getMany();
+            });
+        } else {
+            let columnName = '';
+            if (serviceName.name === 'isBarber') columnName = 'provider.isBarber';
+            else if (serviceName.name === 'isPiercing') columnName = 'provider.isPiercing';
+            else if (serviceName.name === 'isTattoo') columnName = 'provider.isTattoo';
+
+            providersQuery.where(`${columnName} = true`);
+        }
+
+        const providers = await providersQuery.getMany();
 
         const filteredList = providers.map((provider: any) => {
             return {
