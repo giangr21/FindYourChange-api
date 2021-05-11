@@ -35,6 +35,7 @@ class AppointmentRepository extends Repository<Appointment> {
             .leftJoin('appointment.service', 'service')
             .leftJoin('appointment.clerk', 'clerk')
             .leftJoin('appointment.user', 'user')
+            .orderBy('appointment.dateAppointment', 'DESC')
             .where('appointment.provider.id = :providerId', {
                 providerId: idProvider,
             });
