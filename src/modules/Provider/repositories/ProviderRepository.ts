@@ -74,9 +74,13 @@ class ProviderRepository extends Repository<Provider> {
         return filteredList;
     }
 
-    public async findByFilter(filter: any): Promise<Provider[]> {
-        const provider = await this.createQueryBuilder('provider')
+    public async findByFilter(filter: any): Promise<Appointment[]> {
+        const appointmentsRepository = getCustomRepository(AppointmentRepository);
+        const provider = await appointmentsRepository
+            .createQueryBuilder('appointment')
+            .distinctOn(['provider.legalName'])
             .select([
+                'appointment.id',
                 'provider.id',
                 'provider.addressCity',
                 'provider.addressArea',
@@ -90,11 +94,39 @@ class ProviderRepository extends Repository<Provider> {
                 'service.value',
                 'service.disccount',
                 'providerImage',
+                'clerk.id',
             ])
-            .leftJoin('provider.services', 'service', 'service.isPopularService = true')
-            .leftJoin('provider.providerImages', 'providerImage', 'providerImage.defaultImage = true');
+            .leftJoin('appointment.provider', 'provider')
+            .leftJoin('provider.providerImages', 'providerImage', 'providerImage.defaultImage = true')
+            .leftJoin('appointment.service', 'service')
+            .leftJoin('appointment.clerk', 'clerk')
+            .groupBy('provider.legalName')
+            .addGroupBy('appointment.id')
+            .addGroupBy('provider.id')
+            .addGroupBy('service.id')
+            .addGroupBy('providerImage.id')
+            .addGroupBy('clerk.id');
 
-        if (filter.category && filter.category.trim() !== '') {
+        // const provider = await this.createQueryBuilder('provider')
+        //     .select([
+        //         'provider.id',
+        //         'provider.addressCity',
+        //         'provider.addressArea',
+        //         'provider.legalName',
+        //         'provider.phone',
+        //         'provider.isTattoo',
+        //         'provider.isPiercing',
+        //         'provider.isBarber',
+        //         'service.id',
+        //         'service.title',
+        //         'service.value',
+        //         'service.disccount',
+        //         'providerImage',
+        //     ])
+        //     .leftJoin('provider.services', 'service', 'service.isPopularService = true')
+        //     .leftJoin('provider.providerImages', 'providerImage', 'providerImage.defaultImage = true');
+
+        if (filter.dateAppoitment && filter.category.trim() !== '') {
             // TODO: Filter flag hasAvailability.
         }
 
@@ -148,6 +180,7 @@ class ProviderRepository extends Repository<Provider> {
             .skip((filter.page - 1) * 10)
             .take(10)
             .getMany();
+
         return services;
     }
 
