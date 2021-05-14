@@ -85,13 +85,9 @@ class ProviderRepository extends Repository<Provider> {
         return filteredList;
     }
 
-    public async findByFilter(filter: any): Promise<Appointment[]> {
-        const appointmentsRepository = getCustomRepository(AppointmentRepository);
-        const provider = await appointmentsRepository
-            .createQueryBuilder('appointment')
-            .distinctOn(['provider.legalName'])
+    public async findByFilter(filter: any): Promise<Provider[]> {
+        const provider = await this.createQueryBuilder('provider')
             .select([
-                'appointment.id',
                 'provider.id',
                 'provider.addressCity',
                 'provider.addressArea',
@@ -105,40 +101,14 @@ class ProviderRepository extends Repository<Provider> {
                 'service.value',
                 'service.disccount',
                 'providerImage',
-                'clerk.id',
             ])
-            .leftJoin('appointment.provider', 'provider')
-            .leftJoin('provider.providerImages', 'providerImage', 'providerImage.defaultImage = true')
-            .leftJoin('appointment.service', 'service')
-            .leftJoin('appointment.clerk', 'clerk')
-            .groupBy('provider.legalName')
-            .addGroupBy('appointment.id')
-            .addGroupBy('provider.id')
-            .addGroupBy('service.id')
-            .addGroupBy('providerImage.id')
-            .addGroupBy('clerk.id');
+            .leftJoin('provider.services', 'service', 'service.isPopularService = true')
+            .leftJoin('provider.providerImages', 'providerImage', 'providerImage.defaultImage = true');
 
-        // const provider = await this.createQueryBuilder('provider')
-        //     .select([
-        //         'provider.id',
-        //         'provider.addressCity',
-        //         'provider.addressArea',
-        //         'provider.legalName',
-        //         'provider.phone',
-        //         'provider.isTattoo',
-        //         'provider.isPiercing',
-        //         'provider.isBarber',
-        //         'service.id',
-        //         'service.title',
-        //         'service.value',
-        //         'service.disccount',
-        //         'providerImage',
-        //     ])
-        //     .leftJoin('provider.services', 'service', 'service.isPopularService = true')
-        //     .leftJoin('provider.providerImages', 'providerImage', 'providerImage.defaultImage = true');
-
-        if (filter.dateAppoitment && filter.category.trim() !== '') {
-            // TODO: Filter flag hasAvailability.
+        if (filter.serviceName && filter.serviceName.trim() !== '') {
+            provider.andWhere('service.title ilike :serviceName', {
+                serviceName: `%${filter.serviceName.trim()}%`,
+            });
         }
 
         if (filter.name && filter.name.trim() !== '') {
