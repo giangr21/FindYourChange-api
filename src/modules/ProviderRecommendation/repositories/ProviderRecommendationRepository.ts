@@ -40,14 +40,31 @@ class ProviderRecommendationRepository extends Repository<ProviderRecommendation
         return providerRecommendationToReturn;
     }
 
-    public async getPopularRecommendations(): Promise<ProviderRecommendation[]> {
-        const providerRecommendations = await this.createQueryBuilder('provider_recommendation').select();
-        // .orderBy('service.createdAt')
-        // .where('service.provider = :providerId', {
-        //     providerId: filter.providerId,
-        // });
+    public async getPopularRecommendations(): Promise<any> {
+        const providerRecommendations = await this.createQueryBuilder('providerRecommendation')
+            .select([
+                'providerRecommendation.rating',
+                'providerRecommendation.id',
+                'provider.legalName',
+                'provider.addressCity',
+                'provider.phone',
+                'providerImage',
+            ])
+            .innerJoin('providerRecommendation.provider', 'provider')
+            .leftJoin('provider.providerImages', 'providerImage', 'providerImage.defaultImage = true')
+            .orderBy('providerRecommendation.rating', 'DESC')
+            .where('providerRecommendation.rating = 5 or providerRecommendation.rating = 4')
+            .limit(10)
+            .getMany();
 
-        return providerRecommendations.getMany();
+        for (let i = providerRecommendations.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            const temp = providerRecommendations[i];
+            providerRecommendations[i] = providerRecommendations[j];
+            providerRecommendations[j] = temp;
+        }
+
+        return [...new Map(providerRecommendations.map(item => [item.provider.legalName, item])).values()];
     }
 }
 

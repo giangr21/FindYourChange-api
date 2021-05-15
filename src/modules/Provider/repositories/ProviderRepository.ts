@@ -105,8 +105,10 @@ class ProviderRepository extends Repository<Provider> {
             .leftJoin('provider.services', 'service', 'service.isPopularService = true')
             .leftJoin('provider.providerImages', 'providerImage', 'providerImage.defaultImage = true');
 
-        if (filter.category && filter.category.trim() !== '') {
-            // TODO: Filter flag hasAvailability.
+        if (filter.serviceName && filter.serviceName.trim() !== '') {
+            provider.andWhere('service.title ilike :serviceName', {
+                serviceName: `%${filter.serviceName.trim()}%`,
+            });
         }
 
         if (filter.name && filter.name.trim() !== '') {
@@ -159,6 +161,7 @@ class ProviderRepository extends Repository<Provider> {
             .skip((filter.page - 1) * 10)
             .take(10)
             .getMany();
+
         return services;
     }
 
