@@ -244,9 +244,10 @@ class ProviderRepository extends Repository<Provider> {
                 if (service.isPopularService) provider.isPopular.push(service);
                 else provider.isNotPopular.push(service);
 
-                service.clerks.forEach((clerk: any) => {
-                    clerk.avatar = storageUtil.TransformImgToBase64(clerk.avatar);
-                });
+                for (let i = 0; i < service.clerks.length; i++) {
+                    const clerk = service.clerks[i];
+                    clerk.image = storageUtil.TransformImgToBase64(clerk.image);
+                }
             }
         }
 
