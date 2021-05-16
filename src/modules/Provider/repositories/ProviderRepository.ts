@@ -241,6 +241,8 @@ class ProviderRepository extends Repository<Provider> {
             for (let index = 0; index < provider.services.length; index++) {
                 const service = provider.services[index];
 
+                if (service.image) service.image = storageUtil.TransformImgToBase64(service.image);
+
                 if (service.isPopularService) provider.isPopular.push(service);
                 else provider.isNotPopular.push(service);
 
