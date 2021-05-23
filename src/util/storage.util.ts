@@ -80,4 +80,10 @@ export default class StorageUtil {
         const contents = fs.readFileSync(img, { encoding: 'base64' });
         return contents;
     }
+
+    public TransformImgToBase64OriginalSize(nome: string): any {
+        const img = this.getFile(nome);
+        const contents = fs.readFileSync(img, { encoding: 'base64' });
+        return contents;
+    }
 }

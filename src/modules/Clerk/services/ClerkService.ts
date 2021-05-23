@@ -1,3 +1,4 @@
+import ClerkSchedule from '@modules/ClerkSchedule/entities/ClerkSchedule';
 import AppError from '@shared/errors/AppError';
 import StorageUtil from '@util/storage.util';
 import { getCustomRepository } from 'typeorm';
@@ -26,6 +27,12 @@ export default class ClerkService {
         }
 
         const clerks = await clerkRepository.findClerksByProviderId(id);
+        return clerks;
+    }
+
+    public async findWorkTimeByWeekDay(clerkId: any, weekDay: any): Promise<ClerkSchedule | undefined> {
+        const clerkRepository = getCustomRepository(ClerkRepository);
+        const clerks = await clerkRepository.findWorkTimeByWeekDay(clerkId, weekDay);
         return clerks;
     }
 

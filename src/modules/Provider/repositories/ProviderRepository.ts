@@ -210,7 +210,7 @@ class ProviderRepository extends Repository<Provider> {
             ])
             .leftJoin('provider.services', 'services')
             .leftJoin('services.clerks', 'clerks')
-            .leftJoin('provider.schedules', 'schedules')
+            .leftJoin('provider.schedules', 'schedules', 'schedules.active = true')
             .leftJoin('provider.providerImages', 'providerImages')
             .leftJoin('provider.providerRecommendations', 'providerRecommendations')
             .leftJoin('providerRecommendations.user', 'userFromProviderRecommendation')
@@ -235,7 +235,9 @@ class ProviderRepository extends Repository<Provider> {
 
                 const imgBase64 = storageUtil.TransformImgToBase64(providerImage.image);
                 providerImage.imageBase64 = imgBase64;
-                if (providerImage.defaultImage) provider.providerDefaultImg = imgBase64;
+                if (providerImage.defaultImage) {
+                    provider.providerDefaultImg = storageUtil.TransformImgToBase64OriginalSize(providerImage.image);
+                }
             }
 
             for (let index = 0; index < provider.services.length; index++) {

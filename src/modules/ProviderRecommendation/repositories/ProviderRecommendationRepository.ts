@@ -48,6 +48,7 @@ class ProviderRecommendationRepository extends Repository<ProviderRecommendation
                 'provider.legalName',
                 'provider.addressCity',
                 'provider.phone',
+                'provider.id',
                 'providerImage',
             ])
             .innerJoin('providerRecommendation.provider', 'provider')
