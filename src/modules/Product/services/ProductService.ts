@@ -1,4 +1,5 @@
 import { getCustomRepository } from 'typeorm';
+import MercadoPago from 'mercadopago';
 import Product from '../entities/Product';
 import ProductRepository from '../repositories/ProductRepository';
 
@@ -84,6 +85,32 @@ export default class ProductService {
             throw new Error('É necessário informar um id válido!');
         }
         await productRepository.delete(id);
+        return true;
+    }
+
+    public async checkout(data: any): Promise<boolean> {
+        if (process.env.MP_KEY) {
+            MercadoPago.configurations.setAccessToken(process.env.MP_KEY);
+            const paymentData = {
+                transaction_amount: 100,
+                token: data.token,
+                description: 'Blue shirt',
+                installments: Number(data.installments),
+                payment_method_id: data.payment_method_id,
+                issuer_id: data.issuer_id,
+                payer: {
+                    email: 'john@yourdomain.com',
+                },
+            };
+            MercadoPago.payment
+                .save(paymentData)
+                .then(rsp => {
+                    console.log(rsp);
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+        }
         return true;
     }
 }
