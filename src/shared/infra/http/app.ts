@@ -7,6 +7,7 @@ import 'express-async-errors';
 import 'reflect-metadata';
 import fileUpload from 'express-fileupload';
 import { Server, createServer } from 'http';
+import bodyParser from 'body-parser';
 import routes from './routes';
 
 class App {
@@ -19,6 +20,8 @@ class App {
 
         this.app.use(cors());
         this.app.use(express.json());
+        this.app.use(bodyParser.json());
+        this.app.use(bodyParser.urlencoded({ extended: true }));
         this.app.use(fileUpload());
 
         this.app.use(routes);
