@@ -7,9 +7,10 @@ interface AppointmentData {
     id: string;
     provider: any;
     user: any;
-    serviceType: string;
-    rating: number;
+    clerk: any;
+    service: any;
     notes: string;
+    dateAppointment: string;
 }
 
 export default class AppointmentService {
@@ -74,8 +75,20 @@ export default class AppointmentService {
 
     public async create(appointmentData: AppointmentData): Promise<string> {
         const appointmentRepository = getCustomRepository(AppointmentRepository);
-        const appointment = await appointmentRepository.save(appointmentData);
-        return appointment.id;
+
+        const appointment = await appointmentRepository.findAppointmentInSpecificDate(
+            appointmentData.clerk,
+            appointmentData.service,
+            appointmentData.dateAppointment,
+        );
+        if (appointment) {
+            throw new AppError(
+                `Já existe um agendamento para o horario ${appointmentData.dateAppointment}, Tente novamente com outro horario!`,
+            );
+        }
+
+        const newAppointment = await appointmentRepository.save(appointmentData);
+        return newAppointment.id;
     }
 
     public async update(appointmentData: AppointmentData): Promise<string> {
@@ -87,8 +100,8 @@ export default class AppointmentService {
             throw new AppError('Agendamento não encontrado.');
         }
 
-        const newAppointment = await appointmentRepository.save(appointmentData);
-        return newAppointment.id;
+        const updatedAppointment = await appointmentRepository.save(appointmentData);
+        return updatedAppointment.id;
     }
 
     public async delete(id: string): Promise<boolean> {
