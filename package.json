@@ -12,7 +12,7 @@
         "lint": "eslint */**/*.{js,ts} --quiet --fix",
         "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
         "test": "cross-env NODE_ENV=test jest",
-        "start": "node dist/index.js",
+        "start": "node -r ts-node/register/transpile-only -r tsconfig-paths/register dist/index.js",
         "tsc": "tsc"
     },
     "dependencies": {
