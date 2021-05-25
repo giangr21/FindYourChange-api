@@ -68,6 +68,7 @@ class ProductRepository extends Repository<Product> {
         const findProducts = await this.createQueryBuilder('product')
             .select(['product', 'product.name', 'product.description', 'product.value', 'product.productImage'])
             .leftJoin('product.provider', 'provider')
+            .where('product.quantity >= 1')
             .orderBy('product.createdAt');
 
         if (filter.name && filter.name.trim() !== '') {
