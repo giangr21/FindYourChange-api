@@ -3,14 +3,6 @@ import MercadoPago from 'mercadopago';
 import Product from '../entities/Product';
 import ProductRepository from '../repositories/ProductRepository';
 
-interface ProductData {
-    id?: string;
-    name: string;
-    image: string;
-    phone: string;
-    email: string;
-}
-
 export default class ProductService {
     public async get(): Promise<Product[]> {
         const productRepository = getCustomRepository(ProductRepository);
@@ -51,7 +43,7 @@ export default class ProductService {
         return productsArr;
     }
 
-    public async create(productData: ProductData): Promise<string> {
+    public async create(productData: any): Promise<string> {
         const productRepository = getCustomRepository(ProductRepository);
         const alreadyExists = await productRepository.findByName(productData.name);
         if (alreadyExists) {
@@ -61,7 +53,7 @@ export default class ProductService {
         return product.id;
     }
 
-    public async update(productData: ProductData): Promise<string> {
+    public async update(productData: any): Promise<string> {
         const productRepository = getCustomRepository(ProductRepository);
         if (!productData.id) {
             throw new Error('Necessario informar id');
@@ -70,10 +62,6 @@ export default class ProductService {
         if (!alreadyExists) {
             throw new Error('É Necessário informar um id válido!');
         }
-        // const sameEmail = await productRepository.findByEmail(clerkData.email);
-        // if (sameEmail && !(alreadyExists.id === sameEmail.id)) {
-        //     throw new Error('Ja existe um atendente com este email');
-        // }
         const product = await productRepository.save(productData);
         return product.id;
     }
@@ -88,23 +76,30 @@ export default class ProductService {
         return true;
     }
 
-    public async checkout(data: any): Promise<boolean> {
-        if (process.env.MP_KEY) {
-            MercadoPago.configurations.setAccessToken(process.env.MP_KEY);
+    public async checkout(productId: string, mercadoPagoData: any): Promise<boolean> {
+        const productRepository = getCustomRepository(ProductRepository);
+        const product = await productRepository.findById(productId);
+
+        if (product) {
+            MercadoPago.configurations.setAccessToken('TEST-6807718697390524-051723-9d40471e78db261b65f02e1c7c74bab7-154938818');
             const paymentData = {
-                transaction_amount: 100,
-                token: data.token,
-                description: 'Blue shirt',
-                installments: Number(data.installments),
-                payment_method_id: data.payment_method_id,
-                issuer_id: data.issuer_id,
+                transaction_amount: Number(product.value),
+                token: mercadoPagoData.token,
+                description: 'FYC Product from marketplace',
+                installments: Number(mercadoPagoData.installments),
+                payment_method_id: mercadoPagoData.payment_method_id,
+                issuer_id: mercadoPagoData.issuer_id,
                 payer: {
-                    email: 'john@yourdomain.com',
+                    email: 'Admin-FYC@fyc.com.br',
                 },
             };
             MercadoPago.payment
                 .save(paymentData)
-                .then(rsp => {
+                .then(async rsp => {
+                    await productRepository.save({
+                        id: productId,
+                        quantity: product.quantity >= 1 ? product.quantity - 1 : 0,
+                    });
                     console.log(rsp);
                 })
                 .catch(error => {

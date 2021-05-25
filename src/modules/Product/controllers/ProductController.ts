@@ -112,11 +112,9 @@ export default class ProductController {
     public async checkout(request: Request, response: Response): Promise<Response> {
         try {
             const productService = new ProductService();
-            const { token } = request.body;
-            const { payment_method_id } = request.body;
-            const { installments } = request.body;
-            const { issuer_id } = request.body;
-            await productService.checkout({ token, payment_method_id, installments, issuer_id });
+            const { product_id } = request.params;
+            const { token, payment_method_id, installments, issuer_id } = request.body;
+            await productService.checkout(product_id, { token, payment_method_id, installments, issuer_id });
             return response.status(204).send();
         } catch (e) {
             console.log(e);
