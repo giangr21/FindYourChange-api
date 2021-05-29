@@ -17,8 +17,8 @@ class ProviderImageRepository extends Repository<ProviderImage> {
         return providerImage;
     }
 
-    public async setAllImagesDefaultFalse(): Promise<void> {
-        await this.query("UPDATE provider_image SET default_image = 'false'");
+    public async setAllImagesDefaultFalse(providerId: string): Promise<void> {
+        await this.query(`UPDATE provider_image SET default_image = 'false' where provider_id = '${providerId}'`);
     }
 
     public async setDefaultImage(id: string): Promise<void> {
