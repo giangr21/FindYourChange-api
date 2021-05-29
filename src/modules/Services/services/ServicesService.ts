@@ -69,8 +69,8 @@ export default class ServicesService {
         await getConnection().createQueryBuilder().relation(Services, 'clerks').of(service.id).remove(service.clerks);
         await getConnection().createQueryBuilder().relation(Services, 'clerks').of(service).add(clerksId);
 
-        const newService = await servicesRepository.save(servicesData);
-        return newService.id;
+        const updatedService = await servicesRepository.save(servicesData);
+        return updatedService.id;
     }
 
     public async delete(id: string): Promise<boolean> {

@@ -16,7 +16,7 @@ export default class ProviderImageService {
         return providerImage.id;
     }
 
-    public async updateDefaultImage(id: string): Promise<boolean> {
+    public async updateDefaultImage(id: string, providerId: string): Promise<boolean> {
         const providerImageRepository = getCustomRepository(ProviderImageRepository);
         const alreadyExists = await providerImageRepository.findById(id);
 
@@ -24,7 +24,7 @@ export default class ProviderImageService {
             throw new AppError('É necessário informar um id válido!');
         }
 
-        await providerImageRepository.setAllImagesDefaultFalse();
+        await providerImageRepository.setAllImagesDefaultFalse(providerId);
 
         await providerImageRepository.setDefaultImage(id);
 

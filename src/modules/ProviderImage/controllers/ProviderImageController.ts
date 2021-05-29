@@ -19,7 +19,8 @@ export default class ProviderImageController {
         try {
             const providerImageService = new ProviderImageService();
             const { id } = request.params;
-            const img = await providerImageService.updateDefaultImage(id);
+            const { providerId } = request.body;
+            const img = await providerImageService.updateDefaultImage(id, providerId);
             return response.json(img);
         } catch (e) {
             console.log(e);
