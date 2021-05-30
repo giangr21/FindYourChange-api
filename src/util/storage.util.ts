@@ -16,9 +16,8 @@ export default class StorageUtil {
 
         const filename = file.image.name.split('.');
         const nome = `${uuidv4()}.${filename[filename.length - 1]}`;
-
         const salvandoArquivoLocal = new Promise((resolve, reject): any => {
-            file.image.mv(`${__dirname}/assets/defaultImgs/${nome}`, (err: any): any => {
+            file.image.mv(pathFinder.resolve(__dirname, '..', 'assets', 'defaultImgs', nome), (err: any): any => {
                 if (err) {
                     reject(err);
                 } else {
@@ -32,18 +31,18 @@ export default class StorageUtil {
         if (arquivoSalvo !== true) {
             throw new AppError(`Falha ao salvar o arquivo ${nome}.`);
         } else {
-            const image = await Jimp.read(`${__dirname}/assets/defaultImgs/${nome}`);
+            const image = await Jimp.read(pathFinder.resolve(__dirname, '..', 'assets', 'defaultImgs', nome));
             await image.resize(120, Jimp.AUTO);
             await image.quality(100);
-            await image.writeAsync(`${__dirname}/assets/defaultImgs/min/${nome}`);
+            await image.writeAsync(pathFinder.resolve(__dirname, '..', 'assets', 'defaultImgs', 'min', nome));
         }
 
         return nome;
     }
 
     public deleteFile(nome: string): void {
-        const path = `${__dirname}/assets/defaultImgs/${nome}`;
-        const pathMin = `${__dirname}/assets/defaultImgs/min/${nome}`;
+        const path = pathFinder.resolve(__dirname, '..', 'assets', 'defaultImgs', nome);
+        const pathMin = pathFinder.resolve(__dirname, '..', 'assets', 'defaultImgs', 'min', nome);
         if (fs.existsSync(path)) {
             fs.unlinkSync(path);
         }
@@ -53,7 +52,7 @@ export default class StorageUtil {
     }
 
     public getFile(nome: string): string {
-        const path = `${__dirname}/assets/defaultImgs/${nome}`;
+        const path = pathFinder.resolve(__dirname, '..', 'assets', 'defaultImgs', nome);
         if (fs.existsSync(path)) {
             return path;
         }
@@ -64,7 +63,7 @@ export default class StorageUtil {
     }
 
     public getFileMin(nome: string): string {
-        const path = `${__dirname}/assets/defaultImgs/min/${nome}`;
+        const path = pathFinder.resolve(__dirname, '..', 'assets', 'defaultImgs', 'min', nome);
         if (fs.existsSync(path)) {
             return path;
         }
