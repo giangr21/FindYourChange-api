@@ -18,7 +18,7 @@ export default class StorageUtil {
         const nome = `${uuidv4()}.${filename[filename.length - 1]}`;
 
         const salvandoArquivoLocal = new Promise((resolve, reject): any => {
-            file.image.mv(`${process.env.STORAGE_PATH}/${nome}`, (err: any): any => {
+            file.image.mv(`${__dirname}/assets/defaultImgs/${nome}`, (err: any): any => {
                 if (err) {
                     reject(err);
                 } else {
@@ -32,18 +32,18 @@ export default class StorageUtil {
         if (arquivoSalvo !== true) {
             throw new AppError(`Falha ao salvar o arquivo ${nome}.`);
         } else {
-            const image = await Jimp.read(`${process.env.STORAGE_PATH}/${nome}`);
+            const image = await Jimp.read(`${__dirname}/assets/defaultImgs/${nome}`);
             await image.resize(120, Jimp.AUTO);
             await image.quality(100);
-            await image.writeAsync(`${process.env.STORAGE_PATH}/min/${nome}`);
+            await image.writeAsync(`${__dirname}/assets/defaultImgs/min/${nome}`);
         }
 
         return nome;
     }
 
     public deleteFile(nome: string): void {
-        const path = `${process.env.STORAGE_PATH}/${nome}`;
-        const pathMin = `${process.env.STORAGE_PATH}/min/${nome}`;
+        const path = `${__dirname}/assets/defaultImgs/${nome}`;
+        const pathMin = `${__dirname}/assets/defaultImgs/min/${nome}`;
         if (fs.existsSync(path)) {
             fs.unlinkSync(path);
         }
@@ -53,7 +53,7 @@ export default class StorageUtil {
     }
 
     public getFile(nome: string): string {
-        const path = `${process.env.STORAGE_PATH}/${nome}`;
+        const path = `${__dirname}/assets/defaultImgs/${nome}`;
         if (fs.existsSync(path)) {
             return path;
         }
@@ -64,7 +64,7 @@ export default class StorageUtil {
     }
 
     public getFileMin(nome: string): string {
-        const path = `${process.env.STORAGE_PATH}/min/${nome}`;
+        const path = `${__dirname}/assets/defaultImgs/min/${nome}`;
         if (fs.existsSync(path)) {
             return path;
         }

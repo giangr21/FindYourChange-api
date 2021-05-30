@@ -5,7 +5,7 @@ module.exports = {
 	port: '5432',
 	username: 'jclan',
 	password: 'jcuser',
-	database: 'fyc',
+	database: 'tstfyc',
 	// entities: [ 'src/modules/**/entities/*.ts' ],
 	entities: [ 'dist/modules/**/entities/*.js' ],
 	migrations: [ 'src/shared/infra/typeorm/migrations/*.ts' ],
