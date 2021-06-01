@@ -105,6 +105,11 @@ export default class ProviderService {
             await storageUtil.deleteFile(provider.avatar);
         }
 
+        if (providerData.password) {
+            const hashedPassword = await hash(providerData.password.toLowerCase(), 8);
+            providerData.password = hashedPassword;
+        }
+
         const newProvider = await providerRepository.save(providerData);
         return newProvider.id;
     }
