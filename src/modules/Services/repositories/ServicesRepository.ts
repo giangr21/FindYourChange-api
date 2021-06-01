@@ -43,7 +43,11 @@ class ServicesRepository extends Repository<Services> {
             });
         }
 
-        if (filter.timeService && filter.timeService !== 'Todos' && filter.timeService.trim() !== '') {
+        if (filter.timeService && filter.timeService === '120') {
+            findServices.andWhere('service.time >= :timeService', {
+                timeService: filter.timeService,
+            });
+        } else if (filter.timeService && filter.timeService !== 'Todos' && filter.timeService.trim() !== '') {
             findServices.andWhere('service.time = :timeService', {
                 timeService: filter.timeService,
             });
