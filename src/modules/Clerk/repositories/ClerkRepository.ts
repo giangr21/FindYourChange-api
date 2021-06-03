@@ -1,3 +1,5 @@
+import Appointment from '@modules/Appointment/entities/Appointment';
+import AppointmentRepository from '@modules/Appointment/repositories/AppointmentRepository';
 import ClerkSchedule from '@modules/ClerkSchedule/entities/ClerkSchedule';
 import ClerkScheduleRepository from '@modules/ClerkSchedule/repositories/clerkScheduleRepository';
 import { EntityRepository, getCustomRepository, Repository } from 'typeorm';
@@ -28,6 +30,24 @@ class ClerkRepository extends Repository<Clerk> {
         const clerks = await findClerk.getMany();
 
         return clerks;
+    }
+
+    public async findAppointmentsByClerkIdAndDate(clerkId: string, dateAppointment: string): Promise<Appointment[]> {
+        const appointmentRepository = getCustomRepository(AppointmentRepository);
+
+        const findAppointments = await appointmentRepository
+            .createQueryBuilder('appointment')
+            .select(['appointment'])
+            .where('appointment.clerk = :clerkId', {
+                clerkId,
+            })
+            .andWhere('DATE (appointment.dateAppointment) = :dateAppointment', {
+                dateAppointment,
+            })
+            .orderBy('appointment.createdAt')
+            .getMany();
+
+        return findAppointments;
     }
 
     public async findWorkTimeByWeekDay(clerkId: string, weekDay: string): Promise<ClerkSchedule | undefined> {

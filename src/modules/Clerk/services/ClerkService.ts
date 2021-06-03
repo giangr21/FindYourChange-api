@@ -30,10 +30,13 @@ export default class ClerkService {
         return clerks;
     }
 
-    public async findWorkTimeByWeekDay(clerkId: any, weekDay: any): Promise<ClerkSchedule | undefined> {
+    public async findWorkTimeByWeekDay(clerkId: any, weekDay: any, selectedDate: any): Promise<ClerkSchedule | undefined> {
         const clerkRepository = getCustomRepository(ClerkRepository);
-        const clerks = await clerkRepository.findWorkTimeByWeekDay(clerkId, weekDay);
-        return clerks;
+
+        const clerkWorkTime = await clerkRepository.findWorkTimeByWeekDay(clerkId, weekDay);
+
+        // const appointments = await clerkRepository.findAppointmentsByClerkIdAndDate(clerkId, selectedDate);
+        return clerkWorkTime;
     }
 
     public async findById(id: string): Promise<Clerk | undefined> {

@@ -29,8 +29,8 @@ export default class ClerkController {
     public async getWorkTimeByWeekDay(request: Request, response: Response): Promise<Response> {
         try {
             const clerkService = new ClerkService();
-            const { clerkId, weekDay } = request.query;
-            const workTime = await clerkService.findWorkTimeByWeekDay(clerkId, weekDay);
+            const { clerkId, weekDay, selectedDate } = request.query;
+            const workTime = await clerkService.findWorkTimeByWeekDay(clerkId, weekDay, selectedDate);
             return response.json(workTime);
         } catch (e) {
             console.log(e);
