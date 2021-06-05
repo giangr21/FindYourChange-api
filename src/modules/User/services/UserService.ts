@@ -45,7 +45,6 @@ class UserService {
         }
 
         const hashedPassword = await hash(userData.password.toLowerCase(), 8);
-        console.log(hashedPassword);
         userData.password = hashedPassword;
 
         const user = userRepository.create(userData);
@@ -61,6 +60,11 @@ class UserService {
 
         if (!user) {
             throw new AppError('Usuario nao encontrado.');
+        }
+
+        if (userData.password) {
+            const hashedPassword = await hash(userData.password.toLowerCase(), 8);
+            userData.password = hashedPassword;
         }
 
         const newUser = await userRepository.save(userData);

@@ -70,14 +70,11 @@ class AppointmentRepository extends Repository<Appointment> {
         return appointments;
     }
 
-    public async findAppointmentInSpecificDate(clerkId: string, serviceId: string, dateAppointment: string): Promise<boolean> {
+    public async findAppointmentInSpecificDate(clerkId: string, dateAppointment: string): Promise<boolean> {
         const appointment = await this.createQueryBuilder('appointment')
             .select(['appointment.id'])
             .where('appointment.clerk = :clerkId', {
                 clerkId,
-            })
-            .andWhere('appointment.service = :serviceId', {
-                serviceId,
             })
             .andWhere('appointment.dateAppointment = :dateAppointment', {
                 dateAppointment,
