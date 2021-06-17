@@ -78,7 +78,6 @@ export default class AppointmentService {
 
         const appointment = await appointmentRepository.findAppointmentInSpecificDate(
             appointmentData.clerk,
-            appointmentData.service,
             appointmentData.dateAppointment,
         );
         if (appointment) {
