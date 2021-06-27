@@ -27,6 +27,9 @@ export default class Product {
     @Column({ type: 'varchar', length: 240, nullable: true })
     description: string;
 
+    @Column({ type: 'varchar', length: 60, nullable: true })
+    lastMercadoPagoId: string;
+
     @ManyToOne(() => Provider, provider => provider.products)
     @JoinColumn({ name: 'provider_id' })
     provider: Provider;
