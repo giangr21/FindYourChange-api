@@ -95,12 +95,12 @@ export default class ProductService {
             };
             MercadoPago.payment
                 .save(paymentData)
-                .then(async rsp => {
+                .then(async (rsp: any) => {
                     await productRepository.save({
                         id: productId,
                         quantity: product.quantity >= 1 ? product.quantity - 1 : 0,
+                        lastMercadoPagoId: rsp.response.id,
                     });
-                    console.log(rsp);
                 })
                 .catch(error => {
                     console.log(error);
